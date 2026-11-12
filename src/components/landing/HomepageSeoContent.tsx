@@ -35,9 +35,9 @@ export function HomepageSeoContent() {
               <p>
                 Borrowing money in India has historically been a frustrating experience — opaque terms,
                 hidden fees, and weeks of waiting. <strong className="text-foreground">Aapka Credit</strong>,
-                powered by Prism Cosmic Private Limited, was founded to change that. We are a
-                direct digital lender, not a marketplace, which means you deal with us and only us —
-                no third-party brokers, no referral commissions buried in your interest rate.
+                powered by Prism Cosmic Private Limited, was founded to change that. We partner
+                exclusively with licensed RBI-registered NBFCs and banks through a single unified digital
+                portal — no third-party brokers, no referral commissions buried in your interest rate.
               </p>
               <p>
                 Our proprietary AI-driven underwriting engine goes beyond your CIBIL score. We analyze
@@ -77,8 +77,8 @@ export function HomepageSeoContent() {
                 },
                 {
                   icon: Users,
-                  title: "1,00,000+ Served",
-                  desc: "Over a lakh Indians have trusted Aapka Credit to help them borrow smarter.",
+                  title: "50 Lakh+ Users",
+                  desc: "Over 50 lakh registered Indians trust Aapka Credit for transparent credit checks and borrowing.",
                 },
               ].map((item) => (
                 <div key={item.title} className="glass rounded-2xl p-5 border border-foreground/10">
@@ -108,7 +108,7 @@ export function HomepageSeoContent() {
             {[
               {
                 title: "Personal Loans",
-                amount: "Up to ₹40 Lakhs",
+                amount: "₹10,000 to ₹5 Lakhs",
                 rate: "Starting 10.49% p.a.",
                 time: "Disbursal in 24 hours",
                 uses: ["Medical emergencies", "Wedding expenses", "Home renovation", "Debt consolidation", "Travel & education"],

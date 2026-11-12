@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -13,14 +14,16 @@ import {
   InputOTPSeparator,
 } from "@/components/ui/input-otp";
 import { ShieldCheck, ArrowRight, Loader2, KeyRound, Sparkles } from "lucide-react";
-import { customerLoginAction } from "@/app/actions/customer-auth";
+import { customerLoginAction, sendOtpAction } from "@/app/actions/customer-auth";
 
 interface LoginModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  redirectTo?: string;
 }
 
-export function LoginModal({ isOpen, onOpenChange }: LoginModalProps) {
+export function LoginModal({ isOpen, onOpenChange, redirectTo = "/dashboard" }: LoginModalProps) {
+  const router = useRouter();
   const [step, setStep] = useState<"phone" | "otp">("phone");
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
@@ -28,20 +31,26 @@ export function LoginModal({ isOpen, onOpenChange }: LoginModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSendOtp = (e: React.FormEvent) => {
+  const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone.length < 10) {
-      setError("Please enter a valid 10-digit mobile number");
+    const cleanPhone = phone.replace(/\D/g, "");
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      setError("Please enter a valid 10-digit Indian mobile number");
       return;
     }
-    
+
     setIsLoading(true);
     setError("");
-    
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep("otp");
-    }, 1000);
+
+    const result = await sendOtpAction(cleanPhone);
+    setIsLoading(false);
+
+    if (!result.success) {
+      setError(result.error || "Failed to send OTP. Please try again.");
+      return;
+    }
+
+    setStep("otp");
   };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
@@ -50,18 +59,22 @@ export function LoginModal({ isOpen, onOpenChange }: LoginModalProps) {
       setError("Please enter the complete 6-digit OTP");
       return;
     }
-    
+
     setIsLoading(true);
     setError("");
-    
-    setTimeout(async () => {
-      try {
-        await customerLoginAction(phone, otp, referralCode);
-      } catch (err) {
-        setIsLoading(false);
-        setError("Something went wrong. Please try again.");
-      }
-    }, 1500);
+
+    const result = await customerLoginAction(phone, otp, referralCode);
+    if (!result.success) {
+      setIsLoading(false);
+      setError(result.error || "Invalid or expired OTP. Please try again.");
+      return;
+    }
+
+    setIsLoading(false);
+    onOpenChange(false);
+    const safeTarget = redirectTo.startsWith("/") ? redirectTo : "/dashboard";
+    router.push(safeTarget);
+    router.refresh();
   };
 
   const handleOpenChange = (open: boolean) => {

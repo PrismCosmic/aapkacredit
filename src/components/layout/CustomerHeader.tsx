@@ -1,48 +1,126 @@
 "use client";
 
-import { Bell, Search, User } from "lucide-react";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Bell, Search, User, LogOut, CheckCircle2, Clock } from "lucide-react";
+import { customerLogoutAction } from "@/app/actions/customer-auth";
+import type { CustomerNotification, CustomerUser } from "@/lib/customerApi";
 
-export function CustomerHeader() {
+interface CustomerHeaderProps {
+  user?: CustomerUser | null;
+  notifications?: CustomerNotification[];
+}
+
+export function CustomerHeader({ user, notifications = [] }: CustomerHeaderProps) {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showNotifs, setShowNotifs] = useState(false);
+
+  const unreadCount = notifications.filter((n) => !n.is_read).length;
+  const displayName = user?.full_name?.trim() || "Borrower";
+  const displaySub = user?.mobile_number ? `+91 ${user.mobile_number}` : user?.email || "Verified Customer";
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchTerm.trim();
+    router.push(q ? `/loans?q=${encodeURIComponent(q)}` : "/loans");
+  };
+
   return (
-    <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-border bg-background/80 backdrop-blur-md px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-      <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <form className="relative flex flex-1" action="#" method="GET">
-          <label htmlFor="search-field" className="sr-only">
-            Search
-          </label>
-          <Search
-            className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-muted-foreground"
-            aria-hidden="true"
-          />
+    <header className="h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-20 px-4 md:px-6 flex items-center justify-between gap-4">
+      <form onSubmit={handleSearch} className="flex items-center gap-3 flex-1 max-w-md">
+        <div className="relative w-full">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
-            id="search-field"
-            className="block h-full w-full border-0 py-0 pl-8 pr-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:ring-0 sm:text-sm focus:outline-none"
-            placeholder="Search FAQs, help articles..."
-            type="search"
-            name="search"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search loans by ID, status, or amount..."
+            className="w-full h-9 pl-9 pr-4 rounded-xl bg-muted/50 border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
-        </form>
-        <div className="flex items-center gap-x-4 lg:gap-x-6">
-          <button type="button" className="-m-2.5 p-2.5 text-muted-foreground hover:text-foreground">
-            <span className="sr-only">View notifications</span>
-            <Bell className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <ThemeToggle />
-
-          <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-border" aria-hidden="true" />
-
-          <div className="flex items-center gap-x-4">
-            <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 dark:bg-blue-900 dark:border-blue-800">
-              <User className="h-4 w-4 text-blue-600 dark:text-blue-300" />
-            </div>
-            <span className="hidden lg:flex lg:items-center">
-              <span className="text-sm font-semibold leading-6 text-foreground" aria-hidden="true">
-                Demo User
-              </span>
-            </span>
-          </div>
         </div>
+      </form>
+
+      <div className="flex items-center gap-3 relative">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowNotifs((v) => !v)}
+            aria-label="Notifications"
+            className="relative p-2 rounded-xl hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Bell className="w-5 h-5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            )}
+          </button>
+
+          {showNotifs && (
+            <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-card border border-border shadow-xl z-30 overflow-hidden">
+              <div className="p-3 border-b border-border flex items-center justify-between">
+                <span className="text-sm font-semibold">Notifications</span>
+                <Link
+                  href="/notifications"
+                  onClick={() => setShowNotifs(false)}
+                  className="text-xs font-medium text-primary hover:underline"
+                >
+                  View all
+                </Link>
+              </div>
+              <div className="max-h-72 overflow-y-auto divide-y divide-border/50">
+                {notifications.length === 0 ? (
+                  <div className="p-6 text-center text-xs text-muted-foreground">
+                    You have no notifications yet.
+                  </div>
+                ) : (
+                  notifications.slice(0, 5).map((n) => (
+                    <Link
+                      key={n.id}
+                      href="/notifications"
+                      onClick={() => setShowNotifs(false)}
+                      className="flex items-start gap-2.5 p-3 hover:bg-muted/40 transition-colors"
+                    >
+                      {n.is_read ? (
+                        <CheckCircle2 className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+                      ) : (
+                        <Clock className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold truncate">{n.title}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2">{n.message}</p>
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <Link
+          href="/profile"
+          className="flex items-center gap-3 pl-3 border-l border-border hover:opacity-90 transition-opacity"
+        >
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-semibold leading-none">{displayName}</p>
+            <p className="text-xs text-muted-foreground mt-1">{displaySub}</p>
+          </div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-emerald-500 flex items-center justify-center text-white font-semibold shadow-sm">
+            <User className="w-4 h-4" />
+          </div>
+        </Link>
+
+        <form action={customerLogoutAction}>
+          <button
+            type="submit"
+            title="Sign out"
+            aria-label="Sign out"
+            className="p-2 rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+        </form>
       </div>
     </header>
   );

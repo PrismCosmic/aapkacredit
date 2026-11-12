@@ -25,11 +25,11 @@ export function CollectionsDashboard({ initialRepayments = [] }: { initialRepaym
   const [loading, setLoading] = useState(false);
 
   // Form state
-  const [loanId, setLoanId] = useState("APP-1029");
-  const [amount, setAmount] = useState<number>(9000);
+  const [loanId, setLoanId] = useState("");
+  const [amount, setAmount] = useState<number>(0);
   const [method, setMethod] = useState("UPI Instant");
-  const [utr, setUtr] = useState("UPI9823481029");
-  const [notes, setNotes] = useState("Direct branch cash collection");
+  const [utr, setUtr] = useState("");
+  const [notes, setNotes] = useState("");
 
   useEffect(() => {
     setUtr(`UPI${Math.floor(1000000000 + Math.random() * 9000000000)}`);
@@ -94,10 +94,10 @@ export function CollectionsDashboard({ initialRepayments = [] }: { initialRepaym
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-success">
-              ₹{(totalCollected > 0 ? totalCollected : 142000).toLocaleString()}
+              ₹{totalCollected.toLocaleString()}
             </div>
             <p className="text-xs text-success/80 mt-1">
-              {paidRepayments.length > 0 ? paidRepayments.length : 15} EMIs successfully cleared
+              {paidRepayments.length} EMIs successfully cleared
             </p>
           </CardContent>
         </Card>
@@ -109,10 +109,10 @@ export function CollectionsDashboard({ initialRepayments = [] }: { initialRepaym
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-amber-500">
-              ₹{(totalUpcoming > 0 ? totalUpcoming : 450000).toLocaleString()}
+              ₹{totalUpcoming.toLocaleString()}
             </div>
             <p className="text-xs text-amber-500/80 mt-1">
-              {pendingRepayments.length > 0 ? pendingRepayments.length : 42} scheduled eNACH debits
+              {pendingRepayments.length} scheduled eNACH debits
             </p>
           </CardContent>
         </Card>
@@ -124,10 +124,10 @@ export function CollectionsDashboard({ initialRepayments = [] }: { initialRepaym
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-destructive">
-              ₹{(totalOverdue > 0 ? totalOverdue : 85000).toLocaleString()}
+              ₹{totalOverdue.toLocaleString()}
             </div>
             <p className="text-xs text-destructive/80 mt-1">
-              {overdueRepayments.length > 0 ? overdueRepayments.length : 8} accounts in collection bucket
+              {overdueRepayments.length} accounts in collection bucket
             </p>
           </CardContent>
         </Card>
@@ -138,7 +138,11 @@ export function CollectionsDashboard({ initialRepayments = [] }: { initialRepaym
             <TrendingUp className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">98.4%</div>
+            <div className="text-2xl font-bold text-primary">
+              {totalCollected + totalOverdue > 0
+                ? `${((totalCollected / (totalCollected + totalOverdue)) * 100).toFixed(1)}%`
+                : "0.0%"}
+            </div>
             <p className="text-xs text-primary/80 mt-1">On-time repayment rate</p>
           </CardContent>
         </Card>

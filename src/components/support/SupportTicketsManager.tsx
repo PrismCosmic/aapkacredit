@@ -37,6 +37,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
   const [tickets, setTickets] = useState(initialTickets || []);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [previewAttachment, setPreviewAttachment] = useState<{ name: string; url?: string } | null>(null);
   const [selectedTicket, setSelectedTicket] = useState<any>(initialTickets?.[0] || null);
   const [replyText, setReplyText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -283,7 +284,17 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
                         <Paperclip className="h-3.5 w-3.5 text-primary" />
                         <span>Attached: {selectedTicket.attachment_name}</span>
                       </div>
-                      <Button variant="ghost" size="sm" className="h-6 text-[10px] text-primary" onClick={() => toast.info(`Viewing ${selectedTicket.attachment_name}`)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 text-[10px] text-primary"
+                        onClick={() =>
+                          setPreviewAttachment({
+                            name: selectedTicket.attachment_name || "attachment",
+                            url: selectedTicket.attachment_url,
+                          })
+                        }
+                      >
                         Inspect File
                       </Button>
                     </div>
@@ -355,6 +366,48 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
           )}
         </Card>
       </div>
+
+      <Dialog open={!!previewAttachment} onOpenChange={(open) => !open && setPreviewAttachment(null)}>
+        <DialogContent className="sm:max-w-lg bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base">
+              <Paperclip className="h-4 w-4 text-primary" />
+              Attachment Preview
+            </DialogTitle>
+            <DialogDescription className="text-xs font-mono">
+              {previewAttachment?.name}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="rounded-xl border border-border bg-muted/30 p-4 flex flex-col items-center justify-center min-h-[200px] gap-3">
+            {previewAttachment?.url ? (
+              <>
+                <img
+                  src={previewAttachment.url}
+                  alt={previewAttachment.name}
+                  className="max-h-72 w-auto rounded-lg object-contain border border-border"
+                />
+                <a
+                  href={previewAttachment.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Open original file in new tab →
+                </a>
+              </>
+            ) : (
+              <p className="text-xs text-muted-foreground text-center">
+                Attachment file <span className="font-mono font-semibold">{previewAttachment?.name}</span> is stored in the support archive without an inline preview URL.
+              </p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" size="sm" onClick={() => setPreviewAttachment(null)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

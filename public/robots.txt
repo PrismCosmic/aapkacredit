@@ -1,0 +1,28 @@
+# AapkaCredit Robots.txt
+User-agent: *
+Disallow: /admin/
+Disallow: /admin
+Disallow: /dashboard/
+Disallow: /dashboard
+Disallow: /apply/
+Disallow: /apply
+Disallow: /loans/
+Disallow: /loans
+Disallow: /checkout/
+Disallow: /checkout
+Disallow: /profile/
+Disallow: /profile
+Disallow: /notifications/
+Disallow: /notifications
+Disallow: /api/
+
+Allow: /
+Allow: /about
+Allow: /contact
+Allow: /careers
+Allow: /privacy-policy
+Allow: /terms
+Allow: /grievance
+
+Sitemap: https://www.aapkacredit.com/sitemap.xml
+

@@ -31,22 +31,6 @@ export default function PersonalLoanPage() {
     }
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://aapkacredit.com"
-    },{
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Personal Loan",
-      "item": "https://aapkacredit.com/personal-loan"
-    }]
-  };
-
   const faqs = [
     {
       question: "What is the maximum personal loan amount I can get?",
@@ -61,19 +45,6 @@ export default function PersonalLoanPage() {
       answer: "No, Aapka Credit maintains complete transparency. All processing fees and interest rates are clearly communicated before you accept the loan offer."
     }
   ];
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": f.answer
-      }
-    }))
-  };
 
   return (
     <main className="min-h-screen bg-background pt-32 pb-24">

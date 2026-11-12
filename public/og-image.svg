@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="55%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1020" cy="120" r="220" fill="#3B82F6" fill-opacity="0.18"/>
+  <circle cx="180" cy="540" r="200" fill="#10B981" fill-opacity="0.18"/>
+  <rect x="96" y="108" width="72" height="72" rx="18" fill="#2563EB"/>
+  <path d="M118 160L132 126L146 160M122.5 149H141.5" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="190" y="156" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="800">Aapka Credit</text>
+  <text x="96" y="290" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="60" font-weight="800">Instant Digital Credit</text>
+  <text x="96" y="362" fill="#93C5FD" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="600">Personal, MSME Business &amp; Education Loans</text>
+  <text x="96" y="445" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="500">100% Paperless DigiLocker e-KYC • RBI-Registered NBFC Partners • Key Fact Statement Upfront</text>
+  <rect x="96" y="498" width="280" height="48" rx="24" fill="#10B981"/>
+  <text x="132" y="530" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="21" font-weight="700">aapkacredit.com</text>
+</svg>

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { initiateRazorpayCheckout, RazorpayCheckoutOptions } from "@/lib/razorpay";
-import { CreditCard, Loader2, CheckCircle2 } from "lucide-react";
+import { initiateRazorpayCheckout } from "@/lib/razorpay";
+import { Loader2, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 interface RazorpayCheckoutButtonProps {
@@ -11,6 +11,7 @@ interface RazorpayCheckoutButtonProps {
   className?: string;
   loanId?: string;
   purpose?: string;
+  paymentType?: "emi" | "fee" | "foreclosure" | "other";
   userDetails?: {
     name?: string;
     email?: string;
@@ -26,6 +27,7 @@ export function RazorpayCheckoutButton({
   className,
   loanId,
   purpose = "Loan Repayment / Processing Fee",
+  paymentType = loanId ? "emi" : "other",
   userDetails,
   onSuccess,
   onFailure,
@@ -34,7 +36,7 @@ export function RazorpayCheckoutButton({
   const [paid, setPaid] = useState(false);
 
   const handlePay = async () => {
-    if (loading) return;
+    if (loading || amount <= 0) return;
     setLoading(true);
 
     const amountInPaise = Math.round(amount * 100);
@@ -42,62 +44,48 @@ export function RazorpayCheckoutButton({
     await initiateRazorpayCheckout({
       amount: amountInPaise,
       currency: "INR",
-      name: "Aapka Credit",
       description: purpose,
+      purpose,
+      loanId,
+      paymentType,
       prefill: userDetails,
-      notes: {
-        loan_id: loanId || "N/A",
-        purpose: purpose,
-      },
-      onSuccess: (verifyData) => {
+      onSuccess: (data) => {
         setLoading(false);
         setPaid(true);
-        toast.success(`Payment verified! ID: ${verifyData.payment_id || "Success"}`);
-        onSuccess?.(verifyData);
+        toast.success(`Payment successful! ID: ${data.payment_id}`);
+        onSuccess?.(data);
       },
-      onFailure: (err) => {
+      onFailure: (error) => {
         setLoading(false);
-        const errMsg = err?.description || err?.message || "Payment was not completed";
-        toast.error(`Payment Failed: ${errMsg}`);
-        onFailure?.(err);
-      },
-      onDismiss: () => {
-        setLoading(false);
-        toast.info("Payment window was cancelled by user.");
+        toast.error(error?.message || "Payment failed or cancelled.");
+        onFailure?.(error);
       },
     });
   };
-
-  if (paid) {
-    return (
-      <button
-        disabled
-        className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs cursor-default"
-      >
-        <CheckCircle2 className="h-4 w-4" />
-        <span>Paid Successfully</span>
-      </button>
-    );
-  }
 
   return (
     <button
       type="button"
       onClick={handlePay}
-      disabled={loading}
+      disabled={loading || paid || amount <= 0}
       className={
         className ||
-        "inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-blue-700 active:scale-98 transition disabled:opacity-70 cursor-pointer"
+        "inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition shadow-sm active:scale-98 disabled:opacity-60 disabled:cursor-not-allowed"
       }
     >
       {loading ? (
         <>
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Opening Gateway...</span>
+          <span>Processing...</span>
+        </>
+      ) : paid ? (
+        <>
+          <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+          <span>Paid Successfully</span>
         </>
       ) : (
         <>
-          <CreditCard className="h-4 w-4" />
+          <ShieldCheck className="h-4 w-4" />
           <span>{buttonText || `Pay ₹${amount.toLocaleString("en-IN")}`}</span>
         </>
       )}

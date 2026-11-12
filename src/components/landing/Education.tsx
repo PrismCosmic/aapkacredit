@@ -34,7 +34,7 @@ const articles = [
     desc: "When to borrow, how to avoid debt traps, and managing emergency cash flow.",
     read: "5 min read",
     category: "Financial Wellness",
-    href: "/blog/how-to-improve-credit-score",
+    href: "/blog/debt-management-tips",
   },
 ];
 

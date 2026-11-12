@@ -1,27 +1,56 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { verifyJWT } from "@/lib/auth";
+import { verifyAdminJWT, verifyCustomerJWT } from "@/lib/auth";
+
+const CUSTOMER_PROTECTED_PREFIXES = [
+  "/dashboard",
+  "/apply",
+  "/loans",
+  "/checkout",
+  "/profile",
+  "/notifications",
+];
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
-  // Protect all /admin routes except /admin/login
   if (pathname.startsWith("/admin")) {
     const isLoginPage = pathname === "/admin/login";
     const sessionCookie = request.cookies.get("admin_session")?.value;
-    
-    // Just check if the cookie exists. The backend will verify the actual signature
-    // when we make API requests.
-    const isAuthenticated = !!sessionCookie;
+    const verifiedAdmin = sessionCookie ? await verifyAdminJWT(sessionCookie) : null;
 
-    if (!isAuthenticated && !isLoginPage) {
-      // Redirect unauthenticated users trying to access dashboard to login page
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+    if (!verifiedAdmin && !isLoginPage) {
+      const response = NextResponse.redirect(new URL("/admin/login", request.url));
+      if (sessionCookie) {
+        response.cookies.delete("admin_session");
+        response.cookies.delete("admin_meta");
+      }
+      return response;
     }
 
-    if (isAuthenticated && isLoginPage) {
-      // Redirect authenticated users trying to access login page to dashboard
+    if (verifiedAdmin && isLoginPage) {
       return NextResponse.redirect(new URL("/admin", request.url));
+    }
+  }
+
+  const isCustomerRoute = CUSTOMER_PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+
+  if (isCustomerRoute) {
+    const customerCookie = request.cookies.get("customer_session")?.value;
+    const verifiedCustomer = customerCookie ? await verifyCustomerJWT(customerCookie) : null;
+
+    if (!verifiedCustomer) {
+      const loginUrl = new URL("/", request.url);
+      loginUrl.searchParams.set("login", "1");
+      loginUrl.searchParams.set("next", `${pathname}${search}`);
+      const response = NextResponse.redirect(loginUrl);
+      if (customerCookie) {
+        response.cookies.delete("customer_session");
+        response.cookies.delete("customer_refresh");
+      }
+      return response;
     }
   }
 
@@ -29,5 +58,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/dashboard/:path*",
+    "/apply/:path*",
+    "/loans/:path*",
+    "/checkout/:path*",
+    "/profile/:path*",
+    "/notifications/:path*",
+  ],
 };

@@ -80,21 +80,36 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
       const rate = l.interest_rate || 14.0;
       const tenure = l.tenure_months || 12;
       const emi = l.emi_amount || calculateEmi(amount, rate, tenure);
-      const isDisbursed = l.current_step === "DISBURSED" || l.status === "Disbursed";
+      const upperStep = String(l.current_step || l.status || "").toUpperCase();
+      const isDisbursed = ["DISBURSED", "ACTIVE", "OVERDUE"].includes(upperStep);
+      const isClosedOrRejected = [
+        "REJECTED",
+        "CLOSED",
+        "CANCELLED",
+        "COOLING_OFF_CANCELLED",
+      ].includes(upperStep);
 
       return {
         id: String(l.id),
         user: l.user_name || `Borrower ${l.user_id ? String(l.user_id).slice(-4) : "User"}`,
-        mobile: l.user_mobile || "+91 98*** ****",
+        mobile: l.user_mobile || "—",
         amount,
         rate,
         tenure,
         emi,
         balance: l.remaining_balance ?? (isDisbursed ? amount : 0),
-        disbursalDate: l.disbursal_date || (isDisbursed ? "12 Oct 2023" : "Pending"),
-        nextDueDate: l.next_emi_date || (isDisbursed ? "12 Nov 2023" : "N/A"),
-        utr: l.utr_number || (isDisbursed ? "IMPS9481928371" : null),
-        status: isDisbursed ? "Active" : l.current_step ? l.current_step.replace(/_/g, " ") : "Pending",
+        disbursalDate:
+          l.disbursal_date ||
+          (isDisbursed && l.created_at
+            ? new Date(l.created_at).toLocaleDateString("en-IN")
+            : isDisbursed
+            ? "Disbursed"
+            : "Pending"),
+        nextDueDate: l.next_emi_date || "—",
+        utr: l.utr_number || null,
+        status: isDisbursed ? "Active" : upperStep ? upperStep.replace(/_/g, " ") : "Pending",
+        upperStep,
+        canDisburse: !isDisbursed && !isClosedOrRejected,
         raw: l,
       };
     });
@@ -205,25 +220,46 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
     }
   };
 
-  // Generate 12-month schedule
   const generateSchedule = (loan: any) => {
     if (!loan) return [];
+    const realRepayments = Array.isArray(loan.raw?.repayments) ? loan.raw.repayments : [];
+    if (realRepayments.length > 0) {
+      let runningBalance = loan.amount;
+      return realRepayments.map((rp: any, idx: number) => {
+        const interest = Math.round((runningBalance * loan.rate) / 12 / 100);
+        const principal = Math.max(0, Math.round((rp.amount || loan.emi) - interest));
+        runningBalance = Math.max(0, runningBalance - principal);
+        return {
+          installment: idx + 1,
+          dueDate: rp.due_date ? new Date(rp.due_date).toLocaleDateString("en-IN") : "—",
+          emi: rp.amount || loan.emi,
+          principal,
+          interest,
+          remaining: runningBalance,
+          status: rp.status || "PENDING",
+        };
+      });
+    }
+
     const schedule = [];
     const monthlyRate = loan.rate / 12 / 100;
     let balance = loan.amount;
+    const baseDate = loan.raw?.created_at ? new Date(loan.raw.created_at) : new Date();
 
     for (let i = 1; i <= Math.min(loan.tenure, 24); i++) {
       const interest = Math.round(balance * monthlyRate);
       const principal = Math.round(loan.emi - interest);
       balance = Math.max(0, balance - principal);
+      const due = new Date(baseDate);
+      due.setMonth(due.getMonth() + i);
       schedule.push({
         installment: i,
-        dueDate: `Day 05, Month ${i}`,
+        dueDate: due.toLocaleDateString("en-IN"),
         emi: loan.emi,
         principal,
         interest,
         remaining: balance,
-        status: i === 1 ? "Paid" : i === 2 ? "Upcoming" : "Scheduled",
+        status: "Projected",
       });
     }
     return schedule;
@@ -344,8 +380,8 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
                       </Button>
                     )}
 
-                    {/* Disburse if awaiting disbursal */}
-                    {loan.status !== "Active" && (
+                    {/* Disburse if awaiting disbursal (never for Active/Rejected/Closed loans) */}
+                    {loan.canDisburse && (
                       <Button
                         size="sm"
                         className="h-8 px-2.5 text-xs bg-primary text-primary-foreground hover:bg-primary/90"

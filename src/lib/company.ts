@@ -1,0 +1,38 @@
+export const COMPANY = {
+  brandName: "Aapka Credit",
+  legalEntity: "Prism Cosmic Private Limited",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://aapkacredit.com",
+  parentUrl: "https://prismcosmic.com",
+  supportEmail: "support@aapkacredit.com",
+  grievanceEmail: "grievance@aapkacredit.com",
+  privacyEmail: "privacy@aapkacredit.com",
+  pressEmail: "press@aapkacredit.com",
+  helplineDisplay: "1800-891-2400",
+  helplineTel: "+9118008912400",
+  grievancePhone: "+91-80-4568-2100",
+  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "918045682100",
+  grievanceOfficer: {
+    name: "Arvind Krishnan",
+    designation: "Principal Nodal & Grievance Redressal Officer",
+    email: "grievance@aapkacredit.com",
+    phone: "+91-80-4568-2100",
+    hours: "Monday to Saturday, 9:30 AM – 6:30 PM IST",
+    resolutionSla: "Within 30 days (initial acknowledgment within 24–48 business hours)",
+  },
+  address: {
+    line1: "4th Floor, Prestige Meridian Tower, MG Road",
+    city: "Bengaluru",
+    state: "Karnataka",
+    postalCode: "560001",
+    country: "India",
+    countryCode: "IN",
+    formatted:
+      "Prism Cosmic Private Limited (Aapka Credit), 4th Floor, Prestige Meridian Tower, MG Road, Bengaluru, Karnataka - 560001, India",
+  },
+  social: {
+    linkedin: "https://www.linkedin.com/showcase/aapkacredit/",
+    instagram: "https://www.instagram.com/aapkacredit",
+    youtube: "https://www.youtube.com/channel/UCqveHQesgiWUyAjeb9-YU3A",
+    twitterHandle: "@aapkacredit",
+  },
+} as const;

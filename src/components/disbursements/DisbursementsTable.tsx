@@ -121,8 +121,12 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
             <Zap className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">99.2%</div>
-            <p className="text-[11px] text-muted-foreground mt-1">RazorpayX & Cashfree Payouts Live</p>
+            <div className="text-2xl font-bold text-foreground">
+              {disbursements.length > 0
+                ? `${((disbursements.filter((d) => d.status === "SUCCESS").length / disbursements.length) * 100).toFixed(1)}%`
+                : "0.0%"}
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1">RazorpayX &amp; Cashfree Payouts Live</p>
           </CardContent>
         </Card>
       </div>
@@ -244,7 +248,7 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
                       </td>
 
                       <td className="px-4 py-3 text-right">
-                        {isPending ? (
+                        {isPending || item.status === "FAILED" ? (
                           <Button
                             size="sm"
                             variant="outline"
@@ -260,7 +264,7 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
                             variant="ghost"
                             size="sm"
                             className="h-7 text-xs text-muted-foreground"
-                            onClick={() => toast.info(`Disbursement ${item.id} settled via ${item.channel}. UTR: ${item.utr_number}`)}
+                            onClick={() => toast.info(`Disbursement ${item.id} settled via ${item.channel}. UTR: ${item.utr_number || "N/A"}`)}
                           >
                             Receipt
                           </Button>

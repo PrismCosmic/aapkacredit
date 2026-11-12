@@ -11,14 +11,46 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Eye, Search, CheckCircle, XCircle, Send } from "lucide-react";
+import { Eye, Search, Filter } from "lucide-react";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 
-export function ApplicationQueueTable({ initialApplications = [] }: { initialApplications?: any[] }) {
-  const [search, setSearch] = useState("");
+const STATUS_GROUPS: Record<string, string[]> = {
+  UNDER_REVIEW: [
+    "OTP_VERIFIED",
+    "CONSENT_GIVEN",
+    "KYC_AADHAAR_DONE",
+    "KYC_PAN_DONE",
+    "BANK_VERIFIED",
+    "INCOME_VERIFIED",
+    "BUREAU_CHECKED",
+    "SUBMITTED",
+    "UNDERWRITING_REVIEW",
+  ],
+  APPROVED: [
+    "OFFER_GENERATED",
+    "OFFER_ACCEPTED",
+    "KFS_ACCEPTED",
+    "ESIGN_COMPLETED",
+    "FEE_PAID",
+    "ENACH_SETUP",
+    "APPROVED_PENDING_DISBURSEMENT",
+  ],
+  DISBURSED: ["DISBURSED", "ACTIVE", "OVERDUE"],
+  REJECTED: ["REJECTED", "CANCELLED", "COOLING_OFF_CANCELLED", "CLOSED"],
+};
+
+export function ApplicationQueueTable({
+  initialApplications = [],
+  initialQuery = "",
+}: {
+  initialApplications?: any[];
+  initialQuery?: string;
+}) {
+  const [search, setSearch] = useState(initialQuery);
   const [riskFilter, setRiskFilter] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(true);
 
   const applications = useMemo(() => {
     return initialApplications.map((app: any) => ({
@@ -28,22 +60,29 @@ export function ApplicationQueueTable({ initialApplications = [] }: { initialApp
       amount: app.approved_amount || app.requested_amount || 0,
       tenure: app.tenure_months || 12,
       riskScore: app.risk_score || "Medium",
-      status: app.status || app.current_step || "Under Review",
-      date: app.created_at ? new Date(app.created_at).toLocaleDateString() : "Recent",
+      status: String(app.current_step || app.status || "UNDERWRITING_REVIEW"),
+      date: app.created_at ? new Date(app.created_at).toLocaleDateString("en-IN") : "Recent",
       cibil: app.cibil_score || 700,
     }));
   }, [initialApplications]);
 
   const filteredApps = useMemo(() => {
+    const q = search.trim().toLowerCase();
     return applications.filter((app) => {
       const matchesSearch =
-        search === "" ||
-        app.id.toLowerCase().includes(search.toLowerCase()) ||
-        app.user.toLowerCase().includes(search.toLowerCase()) ||
-        app.mobile.includes(search);
+        q === "" ||
+        app.id.toLowerCase().includes(q) ||
+        app.user.toLowerCase().includes(q) ||
+        app.mobile.toLowerCase().includes(q);
 
       const matchesRisk = !riskFilter || app.riskScore === riskFilter;
-      const matchesStatus = !statusFilter || app.status.toLowerCase().replace(/_/g, " ") === statusFilter.toLowerCase().replace(/_/g, " ");
+
+      const upperStatus = app.status.toUpperCase().replace(/\s+/g, "_");
+      const matchesStatus =
+        !statusFilter ||
+        (STATUS_GROUPS[statusFilter]
+          ? STATUS_GROUPS[statusFilter].includes(upperStatus)
+          : upperStatus === statusFilter);
 
       return matchesSearch && matchesRisk && matchesStatus;
     });
@@ -53,55 +92,71 @@ export function ApplicationQueueTable({ initialApplications = [] }: { initialApp
     <div className="rounded-xl border border-border bg-card/50 backdrop-blur overflow-hidden">
       {/* Search and Filters Header */}
       <div className="p-4 border-b border-border flex flex-wrap items-center justify-between gap-4">
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search by ID, name, mobile..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-background/50 border-border"
-          />
+        <div className="flex items-center gap-2 w-full max-w-sm">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by ID, name, mobile..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 bg-background/50 border-border"
+            />
+          </div>
+          <Button
+            type="button"
+            variant={showFilters ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => setShowFilters((v) => !v)}
+            className="border-border shrink-0"
+          >
+            <Filter className="mr-1.5 h-3.5 w-3.5" />
+            Filter
+          </Button>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Status Tabs */}
-          <div className="flex bg-muted/40 p-1 rounded-lg border border-border">
-            {[
-              { label: "All", value: null },
-              { label: "Under Review", value: "bureau checked" },
-              { label: "Approved", value: "offer generated" },
-              { label: "Disbursed", value: "disbursed" },
-              { label: "Rejected", value: "rejected" },
-            ].map((tab) => (
-              <button
-                key={tab.label}
-                onClick={() => setStatusFilter(tab.value)}
-                className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${
-                  statusFilter === tab.value
-                    ? "bg-primary text-primary-foreground shadow"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+        {showFilters && (
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Status Tabs */}
+            <div className="flex flex-wrap bg-muted/40 p-1 rounded-lg border border-border">
+              {[
+                { label: "All", value: null },
+                { label: "Under Review", value: "UNDER_REVIEW" },
+                { label: "Approved", value: "APPROVED" },
+                { label: "Disbursed", value: "DISBURSED" },
+                { label: "Rejected / Closed", value: "REJECTED" },
+              ].map((tab) => (
+                <button
+                  key={tab.label}
+                  type="button"
+                  onClick={() => setStatusFilter(tab.value)}
+                  className={`px-3 py-1 text-xs rounded-md font-medium transition-colors ${
+                    statusFilter === tab.value
+                      ? "bg-primary text-primary-foreground shadow"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
 
-          {/* Risk Badges */}
-          <div className="flex gap-1">
-            {["Low", "Medium", "High"].map((risk) => (
-              <Button
-                key={risk}
-                variant={riskFilter === risk ? "default" : "outline"}
-                size="sm"
-                onClick={() => setRiskFilter(riskFilter === risk ? null : risk)}
-                className="h-7 text-xs border-border"
-              >
-                {risk} Risk
-              </Button>
-            ))}
+            {/* Risk Badges */}
+            <div className="flex gap-1">
+              {["Low", "Medium", "High"].map((risk) => (
+                <Button
+                  key={risk}
+                  type="button"
+                  variant={riskFilter === risk ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setRiskFilter(riskFilter === risk ? null : risk)}
+                  className="h-7 text-xs border-border"
+                >
+                  {risk} Risk
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <Table>

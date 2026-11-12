@@ -2,63 +2,60 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, FileText, CheckCircle, Wallet, IndianRupee, TrendingUp, ShieldCheck, Coins } from "lucide-react";
 
 export function MetricsCards({ initialData }: { initialData?: any }) {
+  const pendingApplications =
+    initialData?.pending_approvals !== undefined && initialData?.pending_approvals !== null
+      ? Number(initialData.pending_approvals)
+      : 0;
+
   const metrics = [
     {
       title: "Total Registered Users",
-      value: initialData?.total_users?.toLocaleString() || "0",
-      change: "+12%",
+      value: (initialData?.total_users ?? 0).toLocaleString(),
+      subtitle: "Verified customer accounts",
       icon: Users,
-      trend: "up"
     },
     {
       title: "Paid Bureau Checks",
-      value: initialData?.total_credit_checks?.toLocaleString() || "1,425",
-      change: "+31%",
+      value: (initialData?.total_credit_checks ?? 0).toLocaleString(),
+      subtitle: "Completed CIBIL/CRIF pulls",
       icon: ShieldCheck,
-      trend: "up"
     },
     {
       title: "Assessment Fee Revenue",
-      value: `₹${((initialData?.assessment_fee_revenue || 212325) / 1000).toFixed(1)}k`,
-      change: "+28%",
+      value: `₹${((initialData?.assessment_fee_revenue ?? 0) / 1000).toFixed(1)}k`,
+      subtitle: "Captured processing & fee revenue",
       icon: Coins,
-      trend: "up"
     },
     {
       title: "Active Credit Lines",
-      value: initialData?.active_loans?.toLocaleString() || "0",
-      change: "+5%",
+      value: (initialData?.active_loans ?? 0).toLocaleString(),
+      subtitle: "Disbursed & active loan accounts",
       icon: Wallet,
-      trend: "up"
     },
     {
       title: "Pending Applications",
-      value: initialData?.total_loans ? (initialData.total_loans - initialData.active_loans).toLocaleString() : "0",
-      change: "-2%",
+      value: pendingApplications.toLocaleString(),
+      subtitle: "Awaiting underwriting / KYC review",
       icon: FileText,
-      trend: "down"
     },
     {
       title: "Amount Disbursed",
-      value: `₹${((initialData?.total_disbursed_amount || 0) / 100000).toFixed(2)} L`,
-      change: "+18%",
+      value: `₹${((initialData?.total_disbursed_amount ?? 0) / 100000).toFixed(2)} L`,
+      subtitle: "Cumulative principal disbursed",
       icon: IndianRupee,
-      trend: "up"
     },
     {
       title: "Collection Efficiency",
-      value: `${initialData?.collection_efficiency_pct ?? 98.4}%`,
-      change: "+1.2%",
+      value: `${Number(initialData?.collection_efficiency_pct ?? 0).toFixed(1)}%`,
+      subtitle: "On-time EMI recovery ratio",
       icon: CheckCircle,
-      trend: "up"
     },
     {
       title: "Bureau Approval Rate",
-      value: `${initialData?.bureau_approval_rate_pct ?? 82.4}%`,
-      change: "+4.5%",
+      value: `${Number(initialData?.bureau_approval_rate_pct ?? 0).toFixed(1)}%`,
+      subtitle: "Applications passing risk floor",
       icon: TrendingUp,
-      trend: "up"
-    }
+    },
   ];
 
   return (
@@ -73,9 +70,7 @@ export function MetricsCards({ initialData }: { initialData?: any }) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">{metric.value}</div>
-            <p className={`text-xs mt-1 ${metric.trend === 'up' ? 'text-success' : 'text-destructive'}`}>
-              {metric.change} from last month
-            </p>
+            <p className="text-xs mt-1 text-muted-foreground">{metric.subtitle}</p>
           </CardContent>
         </Card>
       ))}

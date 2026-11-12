@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { savePlatformSettingsAction } from "@/app/actions/admin";
+import { savePlatformSettingsAction, simulateUnderwritingAction } from "@/app/actions/admin";
 import { 
   ShieldAlert, 
   Sliders, 
@@ -34,57 +34,66 @@ import {
 
 export function PlatformSettingsForm({ initialSettings }: { initialSettings: any }) {
   const [loading, setLoading] = useState(false);
-  const [settings, setSettings] = useState({
-    // Basic boundaries
-    min_loan_amount: initialSettings?.min_loan_amount ?? 5000,
-    max_loan_amount: initialSettings?.max_loan_amount ?? 500000,
-    base_interest_rate: initialSettings?.base_interest_rate ?? 12.5,
-    max_tenure_months: initialSettings?.max_tenure_months ?? 36,
-    processing_fee_percentage: initialSettings?.processing_fee_percentage ?? 2.0,
-    min_cibil_score: initialSettings?.min_cibil_score ?? 650,
-    auto_approval_threshold: initialSettings?.auto_approval_threshold ?? 800,
-    max_debt_to_income_ratio: initialSettings?.max_debt_to_income_ratio ?? 50.0,
-    freeze_disbursements: initialSettings?.freeze_disbursements ?? false,
-    maintenance_mode: initialSettings?.maintenance_mode ?? false,
-    auto_bureau_pull: initialSettings?.auto_bureau_pull ?? true,
-    enach_autopay_enabled: initialSettings?.enach_autopay_enabled ?? true,
-    instant_payout_enabled: initialSettings?.instant_payout_enabled ?? true,
+  const [simLoading, setSimLoading] = useState(false);
+  const [serverSimResult, setServerSimResult] = useState<{
+    eligible: boolean;
+    sanction: number;
+    apr: number;
+    tier: string;
+    reason: string;
+  } | null>(null);
 
-    // ── Strategic Marketing vs Underwriting Caps ────────────────────────────
-    display_max_amount: initialSettings?.display_max_amount ?? 500000,
-    display_min_amount: initialSettings?.display_min_amount ?? 5000,
-    marketing_headline: initialSettings?.marketing_headline ?? "Instant Cash Loans up to ₹5,00,000",
-    marketing_tagline: initialSettings?.marketing_tagline ?? "Sanctioned in 3 minutes • 100% Paperless • Zero Collateral",
+  const buildSettings = (src: any) => ({
+    min_loan_amount: src?.min_loan_amount ?? 5000,
+    max_loan_amount: src?.max_loan_amount ?? 500000,
+    base_interest_rate: src?.base_interest_rate ?? 12.5,
+    max_tenure_months: src?.max_tenure_months ?? 36,
+    processing_fee_percentage: src?.processing_fee_percentage ?? 2.0,
+    min_cibil_score: src?.min_cibil_score ?? 650,
+    auto_approval_threshold: src?.auto_approval_threshold ?? 800,
+    max_debt_to_income_ratio: src?.max_debt_to_income_ratio ?? 50.0,
+    freeze_disbursements: src?.freeze_disbursements ?? false,
+    maintenance_mode: src?.maintenance_mode ?? false,
+    auto_bureau_pull: src?.auto_bureau_pull ?? true,
+    enach_autopay_enabled: src?.enach_autopay_enabled ?? true,
+    instant_payout_enabled: src?.instant_payout_enabled ?? true,
 
-    // ── Paid Bureau Assessment & Risk Gating ────────────────────────────────
-    credit_check_fee: initialSettings?.credit_check_fee ?? 199,
-    credit_check_discounted_fee: initialSettings?.credit_check_discounted_fee ?? 149,
-    require_fee_for_score_check: initialSettings?.require_fee_for_score_check ?? true,
-    require_clean_past_repayment: initialSettings?.require_clean_past_repayment ?? true,
-    min_approvable_cibil: initialSettings?.min_approvable_cibil ?? 650,
+    display_max_amount: src?.display_max_amount ?? 500000,
+    display_min_amount: src?.display_min_amount ?? 5000,
+    marketing_headline: src?.marketing_headline ?? "Instant Cash Loans up to ₹5,00,000",
+    marketing_tagline: src?.marketing_tagline ?? "Sanctioned in 3 minutes • 100% Paperless • Zero Collateral",
 
-    internal_max_first_loan: initialSettings?.internal_max_first_loan ?? 15000,
-    tier_1_cibil_min: initialSettings?.tier_1_cibil_min ?? 800,
-    tier_1_max_loan: initialSettings?.tier_1_max_loan ?? 15000,
-    tier_1_interest_rate: initialSettings?.tier_1_interest_rate ?? 12.5,
+    credit_check_fee: src?.credit_check_fee ?? 199,
+    credit_check_discounted_fee: src?.credit_check_discounted_fee ?? 149,
+    require_fee_for_score_check: src?.require_fee_for_score_check ?? true,
+    require_clean_past_repayment: src?.require_clean_past_repayment ?? true,
+    min_approvable_cibil: src?.min_approvable_cibil ?? 650,
 
-    tier_2_cibil_min: initialSettings?.tier_2_cibil_min ?? 750,
-    tier_2_max_loan: initialSettings?.tier_2_max_loan ?? 12000,
-    tier_2_interest_rate: initialSettings?.tier_2_interest_rate ?? 13.5,
+    internal_max_first_loan: src?.internal_max_first_loan ?? 15000,
+    tier_1_cibil_min: src?.tier_1_cibil_min ?? 800,
+    tier_1_max_loan: src?.tier_1_max_loan ?? 15000,
+    tier_1_interest_rate: src?.tier_1_interest_rate ?? 12.5,
 
-    tier_3_cibil_min: initialSettings?.tier_3_cibil_min ?? 700,
-    tier_3_max_loan: initialSettings?.tier_3_max_loan ?? 10000,
-    tier_3_interest_rate: initialSettings?.tier_3_interest_rate ?? 15.0,
+    tier_2_cibil_min: src?.tier_2_cibil_min ?? 750,
+    tier_2_max_loan: src?.tier_2_max_loan ?? 12000,
+    tier_2_interest_rate: src?.tier_2_interest_rate ?? 13.5,
 
-    tier_4_cibil_min: initialSettings?.tier_4_cibil_min ?? 650,
-    tier_4_max_loan: initialSettings?.tier_4_max_loan ?? 5000,
-    tier_4_interest_rate: initialSettings?.tier_4_interest_rate ?? 18.0,
+    tier_3_cibil_min: src?.tier_3_cibil_min ?? 700,
+    tier_3_max_loan: src?.tier_3_max_loan ?? 10000,
+    tier_3_interest_rate: src?.tier_3_interest_rate ?? 15.0,
 
-    repayments_for_upgrade: initialSettings?.repayments_for_upgrade ?? 2,
-    upgrade_amount_step: initialSettings?.upgrade_amount_step ?? 15000,
-    first_time_loan_explanation: initialSettings?.first_time_loan_explanation ?? 
+    tier_4_cibil_min: src?.tier_4_cibil_min ?? 650,
+    tier_4_max_loan: src?.tier_4_max_loan ?? 5000,
+    tier_4_interest_rate: src?.tier_4_interest_rate ?? 18.0,
+
+    repayments_for_upgrade: src?.repayments_for_upgrade ?? 2,
+    upgrade_amount_step: src?.upgrade_amount_step ?? 15000,
+    first_time_loan_explanation:
+      src?.first_time_loan_explanation ??
       "Congratulations! Based on your credit score and verified bureau assessment, your starter credit line is sanctioned. Complete on-time repayments to build your platform trust and unlock higher limits up to ₹5,00,000!",
   });
+
+  const [settings, setSettings] = useState(() => buildSettings(initialSettings));
 
   // Underwriting Live Simulation State
   const [simScore, setSimScore] = useState<number>(760);
@@ -155,7 +164,36 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
     };
   };
 
-  const simResult = getSimulationResult();
+  const simResult = serverSimResult || getSimulationResult();
+
+  const handleRunServerSimulation = async () => {
+    setSimLoading(true);
+    try {
+      const res = await simulateUnderwritingAction({
+        cibil_score: simScore,
+        clean_past_repayment: simCleanHistory,
+      });
+      if (res.success && res.data) {
+        setServerSimResult({
+          eligible: Boolean(res.data.eligible),
+          sanction: Number(res.data.max_eligible_amount || 0),
+          apr: Number(res.data.interest_rate || 0),
+          tier: res.data.credit_tier || "Evaluated",
+          reason:
+            Array.isArray(res.data.rejection_reasons) && res.data.rejection_reasons.length > 0
+              ? res.data.rejection_reasons.join("; ")
+              : "Approved by backend underwriting engine",
+        });
+        toast.success("Server underwriting simulation completed");
+      } else {
+        toast.error(res.error || "Failed to run backend simulation");
+      }
+    } catch {
+      toast.error("Network error during backend simulation");
+    } finally {
+      setSimLoading(false);
+    }
+  };
 
   const handleChange = (field: string, value: any) => {
     setSettings((prev) => ({ ...prev, [field]: value }));
@@ -671,9 +709,23 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
                 </div>
                 <Switch
                   checked={simCleanHistory}
-                  onCheckedChange={setSimCleanHistory}
+                  onCheckedChange={(v) => {
+                    setSimCleanHistory(v);
+                    setServerSimResult(null);
+                  }}
                 />
               </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={simLoading}
+                onClick={handleRunServerSimulation}
+                className="w-full border-primary/40 text-primary hover:bg-primary/10"
+              >
+                <Calculator className="mr-2 h-3.5 w-3.5" />
+                {simLoading ? "Simulating on Server..." : "Verify via Backend Underwriting Engine"}
+              </Button>
             </div>
 
             {/* Simulator Live Output */}
@@ -820,6 +872,8 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
           type="button"
           variant="outline"
           onClick={() => {
+            setSettings(buildSettings(initialSettings));
+            setServerSimResult(null);
             toast.info("Reset to last saved parameters");
           }}
           disabled={loading}

@@ -132,7 +132,7 @@ export function EmiCalculator() {
           </div>
           
           <div className="mt-8 w-full flex justify-center">
-             <MagneticButton href="/#home" variant="primary">
+             <MagneticButton href="/" variant="primary">
                 Apply for this Loan
              </MagneticButton>
           </div>

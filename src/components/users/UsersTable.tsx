@@ -31,16 +31,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { 
-  MoreHorizontal, 
-  Eye, 
-  Edit, 
-  Ban, 
-  KeyRound, 
-  Bell, 
-  Search, 
+import {
+  MoreHorizontal,
+  Eye,
+  Edit,
+  Ban,
+  KeyRound,
+  Bell,
+  Search,
   CheckCircle,
-  UserCheck
+  UserCheck,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -237,10 +238,11 @@ export function UsersTable({ initialUsers = [] }: { initialUsers?: any[] }) {
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {["All", "Active", "Suspended", "KYC Verified"].map((filter) => (
             <Button
               key={filter}
+              type="button"
               variant={statusFilter === (filter === "All" ? null : filter) ? "default" : "outline"}
               size="sm"
               onClick={() => setStatusFilter(filter === "All" ? null : filter)}
@@ -249,6 +251,33 @@ export function UsersTable({ initialUsers = [] }: { initialUsers?: any[] }) {
               {filter}
             </Button>
           ))}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const header = "User ID,Full Name,Mobile,Email,PAN,KYC Status,Credit Score,Active,Registration\n";
+              const rows = filteredUsers
+                .map(
+                  (u) =>
+                    `"${u.displayId}","${String(u.name).replace(/"/g, '""')}","${u.mobile}","${u.email}","${u.pan}","${u.kycStatus}",${u.creditScore},${u.isActive},"${u.regDate}"`
+                )
+                .join("\n");
+              const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", `aapkacredit_users_${new Date().toISOString().slice(0, 10)}.csv`);
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+              toast.success(`Exported ${filteredUsers.length} user records to CSV`);
+            }}
+            className="text-xs border-border"
+          >
+            <Download className="mr-1.5 h-3.5 w-3.5" /> Export CSV
+          </Button>
         </div>
       </div>
 

@@ -25,10 +25,61 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
     if (url.includes("/admin/stats")) return { success: true, data: mockStats };
     if (url.includes("/admin/analytics")) return { success: true, data: mockAnalytics };
     if (url.includes("/admin/settings")) return { success: true, data: mockSettings };
-    if (url.includes("/admin/credit-assessments")) return { success: true, data: mockCreditAssessments };
-    if (url.includes("/admin/support/tickets")) return { success: true, data: mockSupportTickets };
-    if (url.includes("/admin/audit-logs")) return { success: true, data: mockAuditLogs };
-    if (url.includes("/admin/disbursements")) return { success: true, data: mockDisbursements };
+    if (url.includes("/admin/credit-assessments")) {
+      return {
+        success: true,
+        data: mockCreditAssessments,
+        meta: {
+          fee_rate: 149,
+          total_fee_revenue: mockCreditAssessments.reduce((s, c) => s + (c.fee_amount || 0), 0),
+          approval_count: mockCreditAssessments.filter((c) => c.decision === "APPROVED").length,
+          auto_rejected_count: mockCreditAssessments.filter((c) => c.decision === "AUTO_REJECTED").length,
+        },
+      };
+    }
+    if (url.includes("/admin/underwriting/simulate")) {
+      return {
+        success: true,
+        evaluation: {
+          eligible: true,
+          max_eligible_amount: 12000,
+          interest_rate: 13.5,
+          credit_tier: "Tier 2: Prime (750-799)",
+          rejection_reasons: [],
+        },
+      };
+    }
+    if (url.includes("/admin/support/tickets")) {
+      return {
+        success: true,
+        data: mockSupportTickets,
+        meta: {
+          total_tickets: mockSupportTickets.length,
+          open_count: mockSupportTickets.filter((t) => t.status === "OPEN").length,
+          in_progress_count: mockSupportTickets.filter((t) => t.status === "IN_PROGRESS").length,
+          resolved_count: mockSupportTickets.filter((t) => t.status === "RESOLVED").length,
+        },
+      };
+    }
+    if (url.includes("/admin/audit-logs")) {
+      return {
+        success: true,
+        data: mockAuditLogs,
+        meta: { total_events: mockAuditLogs.length, retention_policy: "7 Years (RBI/NBFC Aligned)" },
+      };
+    }
+    if (url.includes("/admin/disbursements")) {
+      return {
+        success: true,
+        data: mockDisbursements,
+        meta: {
+          total_count: mockDisbursements.length,
+          total_disbursed: mockDisbursements.reduce((s, d) => s + (d.status === "SUCCESS" ? d.amount : 0), 0),
+          success_rate: 66.7,
+          connected_gateway: "RazorpayX & Cashfree Payouts",
+        },
+      };
+    }
     if (url.includes("/admin/repayments")) return { success: true, data: mockRepayments };
     if (url.includes("/admin/subadmins")) {
       return {
@@ -99,6 +150,7 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
     const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers,
+      cache: options.cache ?? "no-store",
       signal: controller.signal,
     });
     clearTimeout(timeoutId);

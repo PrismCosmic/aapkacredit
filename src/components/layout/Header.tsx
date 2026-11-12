@@ -2,18 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  Bell, 
-  Search, 
-  ShieldCheck, 
-  Sliders, 
-  FileText, 
-  LogOut, 
-  AlertTriangle, 
-  CheckCircle2, 
-  IndianRupee, 
+import {
+  Bell,
+  Search,
+  Sliders,
+  FileText,
+  LogOut,
+  AlertTriangle,
+  IndianRupee,
   HeadphonesIcon,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
@@ -28,37 +26,34 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { logoutAction } from "@/app/actions/auth";
 
-export function Header() {
+export interface AdminUserMeta {
+  username: string;
+  role: string;
+}
+
+export interface AdminAlertItem {
+  id: string;
+  title: string;
+  desc: string;
+  time: string;
+  type: "alert" | "support" | "success";
+  href: string;
+}
+
+export function Header({
+  adminUser = { username: "admin", role: "admin" },
+  initialAlerts = [],
+}: {
+  adminUser?: AdminUserMeta;
+  initialAlerts?: AdminAlertItem[];
+}) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [unreadCount, setUnreadCount] = useState(3);
+  const [unreadCount, setUnreadCount] = useState(initialAlerts.length);
 
-  const notifications = [
-    {
-      id: "n-1",
-      title: "Failed IMPS Payout Flagged",
-      desc: "UTR payout failed for APP-1092. Retry required.",
-      time: "10m ago",
-      type: "alert",
-      href: "/admin/disbursements",
-    },
-    {
-      id: "n-2",
-      title: "New High-Priority Ticket #TK-84920",
-      desc: "Aarav Sharma reported bureau score discrepancy.",
-      time: "24m ago",
-      type: "support",
-      href: "/admin/support",
-    },
-    {
-      id: "n-3",
-      title: "Bureau Fee Collected",
-      desc: "₹199 paid by Rohan Mehta (CIBIL 740).",
-      time: "1h ago",
-      type: "success",
-      href: "/admin/credit-checks",
-    },
-  ];
+  const displayName = adminUser.username || "admin";
+  const roleLabel = adminUser.role === "subadmin" ? "Subadmin" : "Administrator";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,11 +84,10 @@ export function Header() {
         </form>
 
         <div className="flex items-center gap-x-4 lg:gap-x-6">
-          {/* Notifications Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="relative -m-2.5 p-2.5 text-muted-foreground hover:text-foreground transition-colors rounded-full focus:outline-none"
               >
                 <span className="sr-only">View notifications</span>
@@ -109,8 +103,9 @@ export function Header() {
               <div className="flex items-center justify-between px-2 py-1.5">
                 <DropdownMenuLabel className="p-0 font-semibold text-sm">System Alerts</DropdownMenuLabel>
                 {unreadCount > 0 && (
-                  <button 
-                    onClick={() => setUnreadCount(0)} 
+                  <button
+                    type="button"
+                    onClick={() => setUnreadCount(0)}
                     className="text-[11px] text-primary hover:underline font-medium"
                   >
                     Mark all read
@@ -118,28 +113,41 @@ export function Header() {
                 )}
               </div>
               <DropdownMenuSeparator />
-              <div className="space-y-1">
-                {notifications.map((item) => (
-                  <DropdownMenuItem key={item.id} asChild className="cursor-pointer p-2 rounded-lg hover:bg-muted/60">
-                    <Link href={item.href} className="flex items-start gap-2.5">
-                      <div className="mt-0.5">
-                        {item.type === "alert" && <AlertTriangle className="h-4 w-4 text-amber-500" />}
-                        {item.type === "support" && <HeadphonesIcon className="h-4 w-4 text-sky-500" />}
-                        {item.type === "success" && <IndianRupee className="h-4 w-4 text-emerald-500" />}
-                      </div>
-                      <div className="flex-1 text-xs">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium text-foreground">{item.title}</p>
-                          <span className="text-[10px] text-muted-foreground">{item.time}</span>
+              <div className="space-y-1 py-1">
+                {initialAlerts.length === 0 ? (
+                  <div className="px-3 py-4 text-center text-xs text-muted-foreground">
+                    No pending operational alerts.
+                  </div>
+                ) : (
+                  initialAlerts.map((item) => (
+                    <DropdownMenuItem
+                      key={item.id}
+                      asChild
+                      className="cursor-pointer rounded-lg p-2 focus:bg-muted/50"
+                    >
+                      <Link href={item.href} className="flex items-start gap-2.5">
+                        <div className="mt-0.5 shrink-0">
+                          {item.type === "alert" && <AlertTriangle className="h-4 w-4 text-amber-500" />}
+                          {item.type === "support" && <HeadphonesIcon className="h-4 w-4 text-sky-500" />}
+                          {item.type === "success" && <IndianRupee className="h-4 w-4 text-emerald-500" />}
                         </div>
-                        <p className="text-muted-foreground mt-0.5 line-clamp-1">{item.desc}</p>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
+                        <div className="flex-1 text-xs">
+                          <div className="flex items-center justify-between">
+                            <p className="font-medium text-foreground">{item.title}</p>
+                            <span className="text-[10px] text-muted-foreground">{item.time}</span>
+                          </div>
+                          <p className="text-muted-foreground mt-0.5 line-clamp-1">{item.desc}</p>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))
+                )}
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild className="cursor-pointer text-center justify-center text-xs font-medium text-primary">
+              <DropdownMenuItem
+                asChild
+                className="cursor-pointer text-center justify-center text-xs font-medium text-primary"
+              >
                 <Link href="/admin/audit-logs">View Full Audit Log</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -149,18 +157,20 @@ export function Header() {
 
           <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-border" aria-hidden="true" />
 
-          {/* User Profile Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-x-2.5 focus:outline-none rounded-lg p-1 hover:bg-muted/40 transition-colors">
+              <button
+                type="button"
+                className="flex items-center gap-x-2.5 focus:outline-none rounded-lg p-1 hover:bg-muted/40 transition-colors"
+              >
                 <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                  <span className="text-sm font-semibold text-primary">SA</span>
+                  <span className="text-sm font-semibold text-primary">{initials}</span>
                 </div>
                 <div className="hidden lg:flex lg:flex-col lg:items-start text-left">
                   <span className="text-sm font-semibold leading-tight text-foreground flex items-center gap-1.5">
-                    Super Admin
+                    {displayName}
                     <Badge variant="outline" className="text-[10px] py-0 px-1.5 border-primary/30 text-primary">
-                      Owner
+                      {roleLabel}
                     </Badge>
                   </span>
                   <span className="text-[11px] text-muted-foreground">Operations Control</span>
@@ -171,8 +181,10 @@ export function Header() {
             <DropdownMenuContent align="end" className="w-56 bg-card border-border shadow-xl">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Super Administrator</p>
-                  <p className="text-xs leading-none text-muted-foreground">admin@aapkacredit.com</p>
+                  <p className="text-sm font-medium leading-none">{displayName}</p>
+                  <p className="text-xs leading-none text-muted-foreground capitalize">
+                    Role: {adminUser.role}
+                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -195,7 +207,7 @@ export function Header() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={async () => {
                   await logoutAction();
                 }}

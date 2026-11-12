@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Mail, Phone, User, MessageSquare, Send, CheckCircle2 } from "lucide-react";
 import { Reveal } from "@/components/fx/Reveal";
 import { toast } from "sonner";
+import { COMPANY } from "@/lib/company";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80),
@@ -84,7 +85,7 @@ export function Contact() {
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const [loading, setLoading] = useState(false);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
@@ -98,11 +99,26 @@ export function Contact() {
     }
     setErrors({});
     setLoading(true);
-    setTimeout(() => {
-      toast.success(`Message received for ${selectedTopic}! Our lending advisor will call you shortly.`);
+    try {
+      const res = await fetch("/api/public/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...parsed.data, topic: selectedTopic }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) {
+        toast.error(data?.error || "Unable to send inquiry right now.");
+        return;
+      }
+      toast.success(
+        `Inquiry ${data.referenceId || ""} received for ${selectedTopic}! Our lending advisor will reach out shortly.`
+      );
       setForm({ name: "", email: "", phone: "", message: "" });
+    } catch {
+      toast.error("Network error while submitting your inquiry. Please try again.");
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   }
 
   return (
@@ -125,7 +141,7 @@ export function Contact() {
         {/* 3 Quick Direct Support Channels */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <a
-            href="tel:18008912400"
+            href={`tel:${COMPANY.helplineTel}`}
             className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-300 transition flex items-center gap-3 group"
           >
             <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition">
@@ -133,12 +149,12 @@ export function Contact() {
             </div>
             <div>
               <span className="text-[11px] font-bold text-slate-400 block uppercase">Toll-Free Helpline</span>
-              <span className="text-sm font-extrabold text-slate-900 group-hover:text-blue-600 transition">1800-891-2400</span>
+              <span className="text-sm font-extrabold text-slate-900 group-hover:text-blue-600 transition">{COMPANY.helplineDisplay}</span>
             </div>
           </a>
 
           <a
-            href="https://wa.me/919876543210?text=Hi%2C%20I%20want%20to%20know%20about%20loans"
+            href={`https://wa.me/${COMPANY.whatsappNumber}?text=Hi%2C%20I%20want%20to%20know%20about%20loans`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-emerald-300 transition flex items-center gap-3 group"
@@ -153,7 +169,7 @@ export function Contact() {
           </a>
 
           <a
-            href="mailto:support@aapkacredit.com"
+            href={`mailto:${COMPANY.supportEmail}`}
             className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-300 transition flex items-center gap-3 group"
           >
             <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition">
@@ -161,7 +177,7 @@ export function Contact() {
             </div>
             <div>
               <span className="text-[11px] font-bold text-slate-400 block uppercase">Email Support</span>
-              <span className="text-sm font-extrabold text-slate-900 group-hover:text-indigo-600 transition truncate block">support@aapkacredit.com</span>
+              <span className="text-sm font-extrabold text-slate-900 group-hover:text-indigo-600 transition truncate block">{COMPANY.supportEmail}</span>
             </div>
           </a>
         </div>

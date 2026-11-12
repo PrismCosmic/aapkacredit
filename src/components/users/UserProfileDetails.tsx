@@ -41,20 +41,29 @@ import {
 export function UserProfileDetails({ userId, initialData }: { userId: string; initialData?: any }) {
   const [user, setUser] = useState({
     id: initialData?.id || userId,
-    name: initialData?.full_name || "Ravi Kumar",
-    mobile: initialData?.mobile_number || "+91 9876543210",
-    email: initialData?.email || "ravi.k@example.com",
-    pan: initialData?.pan_number || "ABCDE1234F",
-    regDate: initialData?.created_at ? new Date(initialData.created_at).toLocaleDateString() : "12 Oct 2023",
+    name: initialData?.full_name || "Borrower",
+    mobile: initialData?.mobile_number || "—",
+    email: initialData?.email || "—",
+    pan: initialData?.pan_number || "Not submitted",
+    regDate: initialData?.created_at
+      ? new Date(initialData.created_at).toLocaleDateString("en-IN")
+      : "—",
     kycStatus: initialData?.pan_number ? "Verified" : "Pending",
-    creditScore: initialData?.credit_score || 750,
-    address: initialData?.current_address || "123, MG Road, Indiranagar, Bangalore, 560001",
-    employment: "Senior Software Engineer at Tech Corp",
-    monthlyIncome: "₹85,000",
-    bankAccount: "HDFC Bank ending in 4321 (IFSC: HDFC0001234)",
-    deviceInfo: "iPhone 14 Pro, iOS 17.2 • AapkaCredit v2.4.0",
+    creditScore: initialData?.credit_score ?? 0,
+    address: initialData?.current_address || "—",
+    employment: initialData?.employment_type || initialData?.occupation || "Not provided",
+    monthlyIncome: initialData?.monthly_income
+      ? `₹${Number(initialData.monthly_income).toLocaleString("en-IN")}`
+      : "Not provided",
+    bankAccount: initialData?.bank_account_number
+      ? `${initialData?.bank_name || "Bank"} ending in ${String(initialData.bank_account_number).slice(-4)}${
+          initialData?.ifsc_code ? ` (IFSC: ${initialData.ifsc_code})` : ""
+        }`
+      : "Not linked",
+    deviceInfo: initialData?.device_info || "No registered device metadata",
     isActive: initialData?.is_active ?? true,
   });
+  const loansHistory: any[] = Array.isArray(initialData?.loans) ? initialData.loans : [];
 
   // Modal dialog states
   const [showEdit, setShowEdit] = useState(false);
@@ -324,22 +333,36 @@ export function UserProfileDetails({ userId, initialData }: { userId: string; in
               <CardDescription>Associated personal and digital credit lines.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-background/40">
-                  <div>
-                    <p className="font-semibold text-foreground">Personal Loan — ₹50,000</p>
-                    <p className="text-xs text-muted-foreground">Disbursed on 12 Oct 2023 • EMI: ₹4,510/mo</p>
-                  </div>
-                  <Badge className="bg-success/20 text-success border-success/30">Active</Badge>
+              {loansHistory.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-4 text-center">
+                  No loan applications or credit lines found for this user.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {loansHistory.map((loanItem: any) => (
+                    <div
+                      key={loanItem.id}
+                      className="flex items-center justify-between p-3 rounded-lg border border-border bg-background/40"
+                    >
+                      <div>
+                        <p className="font-semibold text-foreground">
+                          Loan #{String(loanItem.id).slice(0, 8).toUpperCase()} — ₹
+                          {Number(loanItem.approved_amount || loanItem.requested_amount || 0).toLocaleString("en-IN")}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {loanItem.created_at
+                            ? `Created ${new Date(loanItem.created_at).toLocaleDateString("en-IN")}`
+                            : "Application"}{" "}
+                          • {loanItem.tenure_months || 12} Months
+                        </p>
+                      </div>
+                      <Badge variant="outline" className="border-border">
+                        {String(loanItem.current_step || loanItem.status || "PENDING").replace(/_/g, " ")}
+                      </Badge>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-background/40">
-                  <div>
-                    <p className="font-semibold text-foreground">Instant Cash Line — ₹25,000</p>
-                    <p className="text-xs text-muted-foreground">Disbursed on 05 Jun 2023 • Closed & Settled</p>
-                  </div>
-                  <Badge variant="outline" className="border-border text-muted-foreground">Closed (NOC Issued)</Badge>
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

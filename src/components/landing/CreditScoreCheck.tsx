@@ -16,9 +16,9 @@ export function CreditScoreCheck() {
         color: "#10B981", // Emerald
         textColor: "text-emerald-400",
         badgeBg: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-        limit: "Up to ₹50,00,000",
+        limit: "Up to ₹5,00,000",
         rate: "10.49% p.a.",
-        approvalChance: "99% Instant Approval",
+        approvalChance: "High Instant Eligibility",
       };
     } else if (score >= 700) {
       return {
@@ -26,9 +26,9 @@ export function CreditScoreCheck() {
         color: "#3B82F6", // Blue
         textColor: "text-blue-400",
         badgeBg: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-        limit: "Up to ₹25,00,000",
+        limit: "Up to ₹3,50,000",
         rate: "11.99% p.a.",
-        approvalChance: "95% Fast Sanction",
+        approvalChance: "Fast Sanction Eligible",
       };
     } else if (score >= 650) {
       return {
@@ -36,9 +36,9 @@ export function CreditScoreCheck() {
         color: "#F59E0B", // Amber
         textColor: "text-amber-400",
         badgeBg: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-        limit: "Up to ₹10,00,000",
+        limit: "Up to ₹2,00,000",
         rate: "13.50% p.a.",
-        approvalChance: "88% Sanction Rate",
+        approvalChance: "Standard Sanction Eligible",
       };
     } else {
       return {
@@ -46,9 +46,9 @@ export function CreditScoreCheck() {
         color: "#EF4444", // Rose / Red
         textColor: "text-rose-400",
         badgeBg: "bg-rose-500/20 text-rose-400 border-rose-500/30",
-        limit: "Up to ₹3,00,000",
+        limit: "Up to ₹75,000",
         rate: "15.00% p.a.",
-        approvalChance: "78% Eligible with Income Proof",
+        approvalChance: "Eligible with Income Proof",
       };
     }
   };
@@ -64,7 +64,9 @@ export function CreditScoreCheck() {
 
   const handleCheck = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(`/apply?mobile=${encodeURIComponent(mobile)}&score=${simulatedScore}`);
+    const cleaned = mobile.replace(/\D/g, "");
+    if (cleaned.length !== 10) return;
+    router.push(`/apply?mobile=${encodeURIComponent(cleaned)}&score=${simulatedScore}`);
   };
 
   const scoreTiers = [
@@ -88,33 +90,33 @@ export function CreditScoreCheck() {
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-5">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <Gauge className="w-3.5 h-3.5" /> Free Credit Health Report
+                <Gauge className="w-3.5 h-3.5" /> Soft Eligibility & Bureau Estimator
               </span>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-                Check Your Credit Bureau Score For FREE With Zero Impact
+                Estimate Your Credit Eligibility With Zero Score Impact
               </h2>
 
               <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                Know where you stand before applying. Soft credit inquiry powered by TransUnion CIBIL and Experian. Uncover your personalized loan interest rates and pre-approved limits.
+                Know your indicative sanction tier before applying. Soft eligibility simulation with zero credit score deduction; official bureau underwriting and fee disclosures apply in the customer portal when you submit a loan application.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs text-slate-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>100% Free • No hidden charges</span>
+                  <span>Upfront Key Fact Statement (KFS)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Zero score deduction (Soft Inquiry)</span>
+                  <span>Zero score deduction on soft check</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Instant bureau score refresh</span>
+                  <span>TransUnion CIBIL & Experian aligned</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Exclusive lower rate offers</span>
+                  <span>RBI-regulated NBFC partner offers</span>
                 </div>
               </div>
 

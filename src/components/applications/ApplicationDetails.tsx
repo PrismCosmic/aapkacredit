@@ -58,6 +58,11 @@ import {
   Stamp,
   CreditCard,
   Award,
+  Bell,
+  KeyRound,
+  Sliders,
+  Calculator,
+  Play,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -67,6 +72,11 @@ import {
   disburseLoanAction,
   getLoanDossierAction,
   submitLoanAuditAction,
+  simulateUnderwritingAction,
+  adjustLoanTermsAction,
+  resetUserPinAction,
+  sendUserNotificationAction,
+  updateLoanStatusAction,
 } from "@/app/actions/admin";
 
 export function ApplicationDetails({
@@ -78,28 +88,30 @@ export function ApplicationDetails({
 }) {
   const [loan, setLoan] = useState({
     id: initialData?.id || appId,
-    user: initialData?.user_name || "Aarav Sharma",
-    mobile: initialData?.user_mobile || "+91 98765 43210",
-    amount: initialData?.requested_amount || 15000,
-    approvedAmount: initialData?.approved_amount || initialData?.requested_amount || 15000,
-    tenure: initialData?.tenure_months || 6,
+    user: initialData?.user_name || "Applicant",
+    mobile: initialData?.user_mobile || "—",
+    amount: initialData?.requested_amount || 0,
+    approvedAmount: initialData?.approved_amount || initialData?.requested_amount || 0,
+    tenure: initialData?.tenure_months || 12,
     interestRate: initialData?.interest_rate || 13.5,
-    purpose: initialData?.purpose || "Medical & Emergency Expenses",
+    purpose: initialData?.purpose || "Personal Loan",
     status: initialData?.status || initialData?.current_step || "Under Review",
     date: initialData?.created_at
-      ? new Date(initialData.created_at).toLocaleDateString()
-      : "24 Oct 2026",
-    cibil: initialData?.cibil_score || 780,
-    incomeScore: 85,
-    employmentScore: 90,
-    repaymentScore: 80,
-    totalRisk: initialData?.risk_score || "Low",
+      ? new Date(initialData.created_at).toLocaleDateString("en-IN")
+      : "—",
+    cibil: initialData?.cibil_score || 0,
+    incomeScore: initialData?.income_score || 0,
+    employmentScore: initialData?.employment_score || 0,
+    repaymentScore: initialData?.repayment_score || 0,
+    totalRisk: initialData?.risk_score || "Medium",
     utrNumber: initialData?.utr_number || null,
   });
 
   // Comprehensive Dossier State
   const [dossier, setDossier] = useState<any>(null);
   const [dossierLoading, setDossierLoading] = useState(true);
+  const [dossierError, setDossierError] = useState("");
+  const [showEStatementModal, setShowEStatementModal] = useState(false);
 
   // Manual Audit Verification Checklist State
   const [auditChecklist, setAuditChecklist] = useState({
@@ -132,34 +144,101 @@ export function ApplicationDetails({
 
   // Disbursal form state
   const [disburseChannel, setDisburseChannel] = useState<string>("RazorpayX IMPS");
-  const [customUtr, setCustomUtr] = useState<string>("IMPS9182904812");
+  const [customUtr, setCustomUtr] = useState<string>("");
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
-  // Fetch dossier on mount
+  // Underwriting Simulator state
+  const [simCibil, setSimCibil] = useState<number>(initialData?.cibil_score || 750);
+  const [simIncome, setSimIncome] = useState<number>(initialData?.monthly_income || 50000);
+  const [simCleanRepayment, setSimCleanRepayment] = useState<boolean>(true);
+  const [simLoading, setSimLoading] = useState<boolean>(false);
+  const [simResult, setSimResult] = useState<any>(null);
+
+  // Quick Actions state
+  const [isNotifyOpen, setIsNotifyOpen] = useState(false);
+  const [notifyTitle, setNotifyTitle] = useState("");
+  const [notifyMessage, setNotifyMessage] = useState("");
+  const [notifyChannel, setNotifyChannel] = useState("PUSH");
+
+  const [isPinResetOpen, setIsPinResetOpen] = useState(false);
+  const [newPin, setNewPin] = useState("");
+  const [pinReason, setPinReason] = useState("Admin-assisted PIN reset");
+
+  const [isAdjustTermsOpen, setIsAdjustTermsOpen] = useState(false);
+  const [adjustAmount, setAdjustAmount] = useState<number>(loan.approvedAmount);
+  const [adjustRate, setAdjustRate] = useState<number>(loan.interestRate);
+  const [adjustTenure, setAdjustTenure] = useState<number>(loan.tenure);
+  const [adjustNotes, setAdjustNotes] = useState("");
+
+  const [isStatusOverrideOpen, setIsStatusOverrideOpen] = useState(false);
+  const [overrideStep, setOverrideStep] = useState<string>(loan.status || "UNDERWRITING_REVIEW");
+  const [overrideNotes, setOverrideNotes] = useState("");
+  const [quickActionLoading, setQuickActionLoading] = useState(false);
+
+  // Fetch dossier on mount + 30s auto-refresh while non-terminal
   useEffect(() => {
     setIsMounted(true);
-    setCustomUtr(`IMPS${Math.floor(1000000000 + Math.random() * 9000000000)}`);
-    async function loadDossier() {
-      setDossierLoading(true);
+    let cancelled = false;
+
+    async function loadDossier(silent = false) {
+      if (!silent) {
+        setDossierLoading(true);
+        setDossierError("");
+      }
       try {
         const res = await getLoanDossierAction(loan.id);
+        if (cancelled) return;
         if (res.success && res.data) {
           setDossier(res.data);
-          if (res.data.manual_audit?.checklist) {
+          if (res.data.manual_audit?.checklist && !silent) {
             setAuditChecklist(res.data.manual_audit.checklist);
           }
-          if (res.data.manual_audit?.underwriter_notes) {
+          if (res.data.manual_audit?.underwriter_notes && !silent) {
             setUnderwriterNotes(res.data.manual_audit.underwriter_notes);
           }
+          if (res.data.applicant?.monthly_income && !silent) {
+            setSimIncome(Number(res.data.applicant.monthly_income));
+          }
+        } else if (!silent) {
+          setDossierError(res.error || "Unable to fetch underwriting dossier from backend.");
         }
       } catch {
-        console.error("Failed to load loan dossier");
+        if (!cancelled && !silent) {
+          setDossierError("Failed to connect to dossier service.");
+        }
       } finally {
-        setDossierLoading(false);
+        if (!cancelled && !silent) {
+          setDossierLoading(false);
+        }
       }
     }
-    loadDossier();
-  }, [loan.id]);
+
+    loadDossier(false);
+
+    const terminalStatuses = [
+      "DISBURSED",
+      "ACTIVE",
+      "CLOSED",
+      "REJECTED",
+      "CANCELLED",
+      "COOLING_OFF_CANCELLED",
+    ];
+    const isTerminal = terminalStatuses.includes((loan.status || "").toUpperCase());
+    if (isTerminal) {
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const timer = setInterval(() => {
+      loadDossier(true);
+    }, 30000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [loan.id, loan.status]);
 
   // Calculate live EMI: P * r * (1+r)^n / ((1+r)^n - 1)
   const calculateEmi = (p: number, annualRate: number, months: number) => {
@@ -291,55 +370,184 @@ export function ApplicationDetails({
     window.print();
   };
 
+  const borrowerUserId = dossier?.user_id || initialData?.user_id || "";
+
+  const handleSimulateUnderwriting = async () => {
+    setSimLoading(true);
+    try {
+      const res = await simulateUnderwritingAction({
+        cibil_score: simCibil,
+        monthly_income: simIncome,
+        clean_past_repayment: simCleanRepayment,
+      });
+      if (res.success && res.data) {
+        setSimResult(res.data);
+        toast.success("Underwriting simulation completed");
+      } else {
+        toast.error(res.error || "Failed to run simulation");
+      }
+    } catch {
+      toast.error("Network error during underwriting simulation");
+    } finally {
+      setSimLoading(false);
+    }
+  };
+
+  const handleSendNotification = async () => {
+    if (!borrowerUserId) {
+      toast.error("Borrower user ID is not loaded yet");
+      return;
+    }
+    if (!notifyTitle.trim() || !notifyMessage.trim()) {
+      toast.error("Please enter both title and message");
+      return;
+    }
+    setQuickActionLoading(true);
+    try {
+      const res = await sendUserNotificationAction(borrowerUserId, {
+        title: notifyTitle.trim(),
+        message: notifyMessage.trim(),
+        channel: notifyChannel,
+      });
+      if (res.success) {
+        toast.success(res.message || "Notification sent to borrower");
+        setIsNotifyOpen(false);
+        setNotifyTitle("");
+        setNotifyMessage("");
+      } else {
+        toast.error(res.error || "Failed to send notification");
+      }
+    } catch {
+      toast.error("Network error sending notification");
+    } finally {
+      setQuickActionLoading(false);
+    }
+  };
+
+  const handleResetPin = async () => {
+    if (!borrowerUserId) {
+      toast.error("Borrower user ID is not loaded yet");
+      return;
+    }
+    if (!/^\d{4,6}$/.test(newPin.trim())) {
+      toast.error("PIN must be 4 to 6 digits");
+      return;
+    }
+    setQuickActionLoading(true);
+    try {
+      const res = await resetUserPinAction(borrowerUserId, {
+        new_pin: newPin.trim(),
+        reason: pinReason.trim() || "Admin-assisted PIN reset",
+      });
+      if (res.success) {
+        toast.success(res.message || "Borrower PIN reset successfully");
+        setIsPinResetOpen(false);
+        setNewPin("");
+      } else {
+        toast.error(res.error || "Failed to reset PIN");
+      }
+    } catch {
+      toast.error("Network error resetting PIN");
+    } finally {
+      setQuickActionLoading(false);
+    }
+  };
+
+  const handleAdjustTerms = async () => {
+    setQuickActionLoading(true);
+    try {
+      const res = await adjustLoanTermsAction(loan.id, {
+        approved_amount: adjustAmount,
+        interest_rate: adjustRate,
+        tenure_months: adjustTenure,
+        notes: adjustNotes.trim() || undefined,
+      });
+      if (res.success) {
+        toast.success(res.message || "Loan terms updated");
+        setLoan((prev) => ({
+          ...prev,
+          approvedAmount: adjustAmount,
+          interestRate: adjustRate,
+          tenure: adjustTenure,
+        }));
+        setIsAdjustTermsOpen(false);
+      } else {
+        toast.error(res.error || "Failed to adjust loan terms");
+      }
+    } catch {
+      toast.error("Network error adjusting loan terms");
+    } finally {
+      setQuickActionLoading(false);
+    }
+  };
+
+  const handleUpdateStatus = async () => {
+    setQuickActionLoading(true);
+    try {
+      const res = await updateLoanStatusAction(loan.id, {
+        new_step: overrideStep,
+        notes: overrideNotes.trim() || undefined,
+      });
+      if (res.success) {
+        toast.success(`Loan status overridden to ${overrideStep}`);
+        setLoan((prev) => ({ ...prev, status: overrideStep }));
+        setIsStatusOverrideOpen(false);
+      } else {
+        toast.error(res.error || "Failed to override loan status");
+      }
+    } catch {
+      toast.error("Network error overriding loan status");
+    } finally {
+      setQuickActionLoading(false);
+    }
+  };
+
   const applicant = dossier?.applicant || {
     full_name: loan.user,
     mobile_number: loan.mobile,
-    email: "applicant@example.com",
-    dob: "14/08/1988",
-    gender: "Male",
-    current_address: "Flat 402, Green Glen Layout, Bellandur, Bangalore, KA - 560103",
-    employment_type: "Salaried (Full-time)",
-    employer_name: "Infosys Technologies Ltd",
-    monthly_income: 85000,
+    email: initialData?.email || "—",
+    dob: initialData?.dob || "—",
+    gender: initialData?.gender || "—",
+    current_address: initialData?.current_address || "—",
+    employment_type: initialData?.employment_type || "—",
+    employer_name: initialData?.employer_name || "—",
+    monthly_income: initialData?.monthly_income || 0,
     bank_account_holder: loan.user,
-    bank_name: "HDFC Bank",
-    bank_account_number: "50100482910482",
-    bank_ifsc: "HDFC0001234",
-    penny_drop_status: "VERIFIED_MATCH",
+    bank_name: initialData?.bank_name || "—",
+    bank_account_number: initialData?.bank_account_number || "—",
+    bank_ifsc: initialData?.bank_ifsc || "—",
+    penny_drop_status: dossier ? "PENDING" : "UNAVAILABLE",
   };
 
   const liveCapture = dossier?.live_capture || {
-    selfie_url:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
-    captured_at: "24 Oct 2026, 02:30 PM",
-    geo_coordinates: "12.9716° N, 77.5946° E (Bengaluru, KA)",
-    device_model: "Chrome 128 on Samsung Galaxy S23",
-    ip_address: "103.21.244.18",
-    face_match_confidence: 98.7,
-    liveness_confidence: 99.4,
+    selfie_url: "",
+    captured_at: "—",
+    geo_coordinates: "—",
+    device_model: "—",
+    ip_address: "—",
+    face_match_confidence: 0,
+    liveness_confidence: 0,
   };
 
   const docs = dossier?.identity_documents || {
     aadhaar: {
-      number_masked: "XXXXXXXX8921",
-      verified_via: "DigiLocker XML e-KYC (UIDAI)",
-      front_image_url:
-        "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
-      back_image_url:
-        "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=600&q=80",
+      number_masked: "—",
+      verified_via: "Pending",
+      front_image_url: "",
+      back_image_url: "",
     },
     pan: {
-      number: "ABCDE1234F",
-      name_on_card: (applicant?.full_name || loan.user || "APPLICANT NAME").toUpperCase(),
-      card_image_url:
-        "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80",
-      status: "VALID_OPERATIVE",
+      number: "—",
+      name_on_card: (applicant?.full_name || loan.user || "—").toUpperCase(),
+      card_image_url: "",
+      status: "PENDING",
     },
     income_proof: {
-      document_type: "Bank E-Statement (Last 6 Months)",
-      file_name: "HDFC_Bank_Stmt_Apr_Sep.pdf",
-      detected_salary: 85000,
-      avg_monthly_balance: 34800,
+      document_type: "Bank E-Statement",
+      file_name: "Not uploaded",
+      file_url: "",
+      detected_salary: 0,
+      avg_monthly_balance: 0,
     },
   };
 
@@ -347,6 +555,12 @@ export function ApplicationDetails({
 
   return (
     <div className="space-y-6">
+      {dossierError && (
+        <div className="p-4 rounded-xl border border-destructive/30 bg-destructive/10 text-destructive text-sm flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0" />
+          <span>{dossierError}</span>
+        </div>
+      )}
       {/* ── Top Header & Actions ── */}
       <div className="flex flex-wrap items-center justify-between gap-4 print:hidden">
         <div className="flex items-center gap-4">
@@ -604,23 +818,13 @@ export function ApplicationDetails({
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="flex items-center justify-between">
-                      <span>Bank Reference / UTR Number</span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 text-xs text-primary"
-                        onClick={() =>
-                          setCustomUtr(`IMPS${Math.floor(1000000000 + Math.random() * 9000000000)}`)
-                        }
-                      >
-                        <RefreshCw className="h-3 w-3 mr-1" /> Regenerate
-                      </Button>
+                    <Label>
+                      <span>Bank Reference / UTR Number (Optional)</span>
                     </Label>
                     <Input
                       value={customUtr}
                       onChange={(e) => setCustomUtr(e.target.value)}
+                      placeholder="Leave blank for gateway-assigned UTR"
                       className="bg-background/50 border-border font-mono text-sm"
                     />
                   </div>
@@ -655,6 +859,268 @@ export function ApplicationDetails({
             </Dialog>
           )}
         </div>
+      </div>
+
+      {/* ── Intelligent Quick Actions Bar ── */}
+      <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl border border-border bg-card/40 backdrop-blur print:hidden">
+        <span className="text-xs font-semibold text-muted-foreground mr-1">Quick Actions:</span>
+
+        {/* Send Notification */}
+        <Dialog open={isNotifyOpen} onOpenChange={setIsNotifyOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 text-xs" disabled={!borrowerUserId}>
+              <Bell className="w-3.5 h-3.5 mr-1.5" /> Notify Borrower
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-popover border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Bell className="h-4 w-4 text-primary" /> Send Notification to {loan.user}
+              </DialogTitle>
+              <DialogDescription>
+                Dispatch an instant push, SMS, or in-app alert directly to the borrower.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3 py-2">
+              <div className="space-y-1.5">
+                <Label>Channel</Label>
+                <Select value={notifyChannel} onValueChange={setNotifyChannel}>
+                  <SelectTrigger className="bg-background/50 border-border">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="PUSH">Push &amp; In-App Notification</SelectItem>
+                    <SelectItem value="SMS">SMS Alert</SelectItem>
+                    <SelectItem value="EMAIL">Email</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Title</Label>
+                <Input
+                  value={notifyTitle}
+                  onChange={(e) => setNotifyTitle(e.target.value)}
+                  placeholder="e.g. Action Required: Complete e-Sign"
+                  className="bg-background/50 border-border"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Message</Label>
+                <Textarea
+                  value={notifyMessage}
+                  onChange={(e) => setNotifyMessage(e.target.value)}
+                  placeholder="Enter message for the borrower..."
+                  rows={3}
+                  className="bg-background/50 border-border"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsNotifyOpen(false)} disabled={quickActionLoading}>
+                Cancel
+              </Button>
+              <Button onClick={handleSendNotification} disabled={quickActionLoading}>
+                {quickActionLoading ? "Sending..." : "Send Notification"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Reset PIN */}
+        <Dialog open={isPinResetOpen} onOpenChange={setIsPinResetOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 text-xs" disabled={!borrowerUserId}>
+              <KeyRound className="w-3.5 h-3.5 mr-1.5" /> Reset PIN
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-popover border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-primary" /> Reset Borrower App PIN
+              </DialogTitle>
+              <DialogDescription>
+                Set a temporary 4-6 digit MPIN for {loan.user} after identity verification.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3 py-2">
+              <div className="space-y-1.5">
+                <Label>New PIN (4-6 digits)</Label>
+                <Input
+                  type="password"
+                  maxLength={6}
+                  value={newPin}
+                  onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ""))}
+                  placeholder="Enter 4-6 digit PIN"
+                  className="bg-background/50 border-border font-mono"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Audit Reason</Label>
+                <Input
+                  value={pinReason}
+                  onChange={(e) => setPinReason(e.target.value)}
+                  className="bg-background/50 border-border"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsPinResetOpen(false)} disabled={quickActionLoading}>
+                Cancel
+              </Button>
+              <Button onClick={handleResetPin} disabled={quickActionLoading}>
+                {quickActionLoading ? "Resetting..." : "Confirm PIN Reset"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Adjust Loan Terms */}
+        <Dialog open={isAdjustTermsOpen} onOpenChange={setIsAdjustTermsOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 text-xs">
+              <Sliders className="w-3.5 h-3.5 mr-1.5" /> Adjust Terms
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-popover border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Sliders className="h-4 w-4 text-primary" /> Adjust Sanctioned Loan Terms
+              </DialogTitle>
+              <DialogDescription>
+                Modify principal, interest rate, or tenure for Application {loan.id}.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3 py-2">
+              <div className="space-y-1.5">
+                <Label>Approved Amount (₹)</Label>
+                <Input
+                  type="number"
+                  step={1000}
+                  value={adjustAmount}
+                  onChange={(e) => setAdjustAmount(Number(e.target.value))}
+                  className="bg-background/50 border-border"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label>Interest Rate (% p.a.)</Label>
+                  <Input
+                    type="number"
+                    step={0.1}
+                    value={adjustRate}
+                    onChange={(e) => setAdjustRate(Number(e.target.value))}
+                    className="bg-background/50 border-border"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Tenure (Months)</Label>
+                  <Input
+                    type="number"
+                    min={1}
+                    max={60}
+                    value={adjustTenure}
+                    onChange={(e) => setAdjustTenure(Number(e.target.value))}
+                    className="bg-background/50 border-border"
+                  />
+                </div>
+              </div>
+              <div className="p-2.5 rounded-lg bg-primary/5 border border-primary/20 text-xs flex justify-between">
+                <span className="text-muted-foreground">Recalculated EMI:</span>
+                <span className="font-bold text-primary">
+                  ₹{calculateEmi(adjustAmount, adjustRate, adjustTenure).toLocaleString("en-IN")} / mo
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Adjustment Notes</Label>
+                <Input
+                  value={adjustNotes}
+                  onChange={(e) => setAdjustNotes(e.target.value)}
+                  placeholder="Reason for term revision..."
+                  className="bg-background/50 border-border"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsAdjustTermsOpen(false)} disabled={quickActionLoading}>
+                Cancel
+              </Button>
+              <Button onClick={handleAdjustTerms} disabled={quickActionLoading}>
+                {quickActionLoading ? "Updating..." : "Save Revised Terms"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Manual Status Override */}
+        <Dialog open={isStatusOverrideOpen} onOpenChange={setIsStatusOverrideOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm" className="h-8 text-xs">
+              <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Update Status
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-popover border-border">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <RefreshCw className="h-4 w-4 text-primary" /> Manual Loan Step Override
+              </DialogTitle>
+              <DialogDescription>
+                Override the current workflow step. Every override is permanently recorded in the audit log.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3 py-2">
+              <div className="space-y-1.5">
+                <Label>Target Workflow Step</Label>
+                <Select value={overrideStep} onValueChange={setOverrideStep}>
+                  <SelectTrigger className="bg-background/50 border-border">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-popover border-border">
+                    <SelectItem value="SUBMITTED">SUBMITTED</SelectItem>
+                    <SelectItem value="UNDERWRITING_REVIEW">UNDERWRITING_REVIEW</SelectItem>
+                    <SelectItem value="OFFER_GENERATED">OFFER_GENERATED</SelectItem>
+                    <SelectItem value="OFFER_ACCEPTED">OFFER_ACCEPTED</SelectItem>
+                    <SelectItem value="KFS_ACCEPTED">KFS_ACCEPTED</SelectItem>
+                    <SelectItem value="ESIGN_COMPLETED">ESIGN_COMPLETED</SelectItem>
+                    <SelectItem value="FEE_PAID">FEE_PAID</SelectItem>
+                    <SelectItem value="APPROVED_PENDING_DISBURSEMENT">APPROVED_PENDING_DISBURSEMENT</SelectItem>
+                    <SelectItem value="DISBURSED">DISBURSED</SelectItem>
+                    <SelectItem value="ACTIVE">ACTIVE</SelectItem>
+                    <SelectItem value="REJECTED">REJECTED</SelectItem>
+                    <SelectItem value="CLOSED">CLOSED</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Override Reason</Label>
+                <Textarea
+                  value={overrideNotes}
+                  onChange={(e) => setOverrideNotes(e.target.value)}
+                  placeholder="Explain why manual step override is required..."
+                  rows={2}
+                  className="bg-background/50 border-border"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsStatusOverrideOpen(false)} disabled={quickActionLoading}>
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateStatus} disabled={quickActionLoading}>
+                {quickActionLoading ? "Updating..." : "Apply Status Override"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Download Sanction Letter PDF */}
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 text-xs ml-auto"
+          onClick={handlePrintDossier}
+        >
+          <Download className="w-3.5 h-3.5 mr-1.5" /> Sanction &amp; Audit PDF
+        </Button>
       </div>
 
       {/* ── Main Tabbed View ── */}
@@ -761,26 +1227,34 @@ export function ApplicationDetails({
               <CardContent className="space-y-3">
                 <div className="relative group overflow-hidden rounded-xl border border-border aspect-square bg-muted/40">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={liveCapture.selfie_url}
-                    alt="Live Captured User Selfie"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="text-xs"
-                      onClick={() =>
-                        setPreviewImage({
-                          url: liveCapture.selfie_url,
-                          title: `Live Captured User Selfie - ${applicant.full_name}`,
-                        })
-                      }
-                    >
-                      <Eye className="w-3.5 h-3.5 mr-1" /> View High-Res
-                    </Button>
-                  </div>
+                  {liveCapture.selfie_url ? (
+                    <>
+                      <img
+                        src={liveCapture.selfie_url}
+                        alt="Live Captured User Selfie"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="text-xs"
+                          onClick={() =>
+                            setPreviewImage({
+                              url: liveCapture.selfie_url,
+                              title: `Live Captured User Selfie - ${applicant.full_name}`,
+                            })
+                          }
+                        >
+                          <Eye className="w-3.5 h-3.5 mr-1" /> View High-Res
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                      Selfie image not uploaded
+                    </div>
+                  )}
                   <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur rounded p-1.5 text-[10px] text-white space-y-0.5">
                     <p className="flex items-center gap-1">
                       <MapPin className="w-3 h-3 text-primary shrink-0" /> {liveCapture.geo_coordinates}
@@ -826,18 +1300,27 @@ export function ApplicationDetails({
                 <div
                   className="relative rounded-lg overflow-hidden border border-border aspect-[1.6] bg-muted cursor-pointer group"
                   onClick={() =>
+                    docs.aadhaar.front_image_url &&
                     setPreviewImage({
                       url: docs.aadhaar.front_image_url,
                       title: "Aadhaar Card (Front)",
                     })
                   }
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={docs.aadhaar.front_image_url}
-                    alt="Aadhaar Front"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                  />
+                  {docs.aadhaar.front_image_url ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={docs.aadhaar.front_image_url}
+                        alt="Aadhaar Front"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                      Aadhaar image not uploaded
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium">
                     <Eye className="w-4 h-4 mr-1" /> Click to Inspect
                   </div>
@@ -872,18 +1355,27 @@ export function ApplicationDetails({
                 <div
                   className="relative rounded-lg overflow-hidden border border-border aspect-[1.6] bg-muted cursor-pointer group"
                   onClick={() =>
+                    docs.pan.card_image_url &&
                     setPreviewImage({
                       url: docs.pan.card_image_url,
                       title: "PAN Card Document",
                     })
                   }
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={docs.pan.card_image_url}
-                    alt="PAN Card"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                  />
+                  {docs.pan.card_image_url ? (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={docs.pan.card_image_url}
+                        alt="PAN Card"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                      PAN card image not uploaded
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-medium">
                     <Eye className="w-4 h-4 mr-1" /> Click to Inspect
                   </div>
@@ -933,10 +1425,11 @@ export function ApplicationDetails({
                 </div>
                 <div className="pt-1">
                   <Button
+                    type="button"
                     variant="outline"
                     size="sm"
                     className="w-full text-xs border-border"
-                    onClick={() => toast.info(`Viewing e-statement ${docs.income_proof.file_name}`)}
+                    onClick={() => setShowEStatementModal(true)}
                   >
                     <FileDown className="w-3.5 h-3.5 mr-1" /> View Full Bank E-Statement
                   </Button>
@@ -1189,6 +1682,126 @@ export function ApplicationDetails({
               </CardContent>
             </Card>
           </div>
+
+          {/* Underwriting Policy Simulator */}
+          <Card className="bg-card/50 backdrop-blur border-border">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Calculator className="h-5 w-5 text-primary" /> Live Underwriting Policy Simulator
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Test what-if eligibility, sanction caps, and interest tiers against live platform underwriting rules before approving or overriding terms.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <Label>Simulated CIBIL Score</Label>
+                    <span className="font-mono font-bold text-primary">{simCibil}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={300}
+                    max={900}
+                    step={5}
+                    value={simCibil}
+                    onChange={(e) => setSimCibil(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                  <div className="flex justify-between text-[10px] text-muted-foreground">
+                    <span>300 (High Risk)</span>
+                    <span>650</span>
+                    <span>900 (Prime)</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-xs">Monthly Net Income (₹)</Label>
+                  <Input
+                    type="number"
+                    min={5000}
+                    step={1000}
+                    value={simIncome}
+                    onChange={(e) => setSimIncome(Number(e.target.value))}
+                    className="bg-background/50 border-border"
+                  />
+                </div>
+
+                <div className="flex flex-col justify-between space-y-2">
+                  <Label className="text-xs">Repayment Track Record</Label>
+                  <label className="flex items-center gap-2 p-2.5 rounded-lg border border-border bg-muted/30 cursor-pointer text-xs">
+                    <Checkbox
+                      checked={simCleanRepayment}
+                      onCheckedChange={(checked) => setSimCleanRepayment(Boolean(checked))}
+                    />
+                    <span>Clean Past Repayment (No DPD / Default)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <Button
+                  type="button"
+                  onClick={handleSimulateUnderwriting}
+                  disabled={simLoading}
+                  className="bg-primary text-primary-foreground"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  {simLoading ? "Running Policy Engine..." : "Run Underwriting Simulation"}
+                </Button>
+                {simResult && (
+                  <Badge
+                    className={
+                      simResult.decision === "APPROVED"
+                        ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/30"
+                        : "bg-destructive/15 text-destructive border-destructive/30"
+                    }
+                  >
+                    Decision: {simResult.decision}
+                  </Badge>
+                )}
+              </div>
+
+              {simResult && (
+                <div className="p-4 rounded-xl border border-border bg-muted/30 space-y-3">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div>
+                      <p className="text-muted-foreground">Eligibility</p>
+                      <p className={`font-bold ${simResult.decision === "APPROVED" ? "text-emerald-500" : "text-destructive"}`}>
+                        {simResult.decision}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Max Sanction Cap</p>
+                      <p className="font-bold">
+                        {simResult.approved_amount != null
+                          ? `₹${Number(simResult.approved_amount).toLocaleString("en-IN")}`
+                          : "—"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Risk Tier</p>
+                      <p className="font-semibold">{simResult.tier || "Ineligible"}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Simulated Rate / Tenure</p>
+                      <p className="font-semibold">
+                        {simResult.interest_rate != null
+                          ? `${simResult.interest_rate}% • ${simResult.tenure_months || 12} mo`
+                          : "—"}
+                      </p>
+                    </div>
+                  </div>
+                  {simResult.reason && (
+                    <p className="text-xs text-muted-foreground border-t border-border pt-2">
+                      <span className="font-semibold text-foreground">Engine Rationale:</span> {simResult.reason}
+                    </p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* ── TAB 3: Printable PDF Dossier Sheet ── */}
@@ -1338,6 +1951,64 @@ export function ApplicationDetails({
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setPreviewImage(null)}>
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {showEStatementModal && (
+        <Dialog open={showEStatementModal} onOpenChange={setShowEStatementModal}>
+          <DialogContent className="bg-popover border-border max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="text-foreground text-base">
+                Bank E-Statement Summary
+              </DialogTitle>
+              <DialogDescription className="text-xs font-mono">
+                {docs.income_proof?.file_name || "No document uploaded"}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3 p-3 rounded-lg bg-muted/40 border border-border">
+                <div>
+                  <p className="text-muted-foreground">Document Type</p>
+                  <p className="font-semibold">{docs.income_proof?.document_type || "—"}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Detected Monthly Salary</p>
+                  <p className="font-semibold">
+                    ₹{Number(docs.income_proof?.detected_salary || 0).toLocaleString("en-IN")}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Average Balance</p>
+                  <p className="font-semibold">
+                    ₹{Number(docs.income_proof?.avg_monthly_balance || 0).toLocaleString("en-IN")}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Account IFSC</p>
+                  <p className="font-mono font-semibold">{applicant.bank_ifsc || "—"}</p>
+                </div>
+              </div>
+              {docs.income_proof?.file_url ? (
+                <a
+                  href={docs.income_proof.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-primary font-semibold hover:underline"
+                >
+                  Open Uploaded Statement PDF →
+                </a>
+              ) : (
+                <p className="text-muted-foreground">
+                  Parsed metrics above reflect the dossier summary; no downloadable PDF URL was returned by the storage backend.
+                </p>
+              )}
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowEStatementModal(false)}>
                 Close
               </Button>
             </DialogFooter>

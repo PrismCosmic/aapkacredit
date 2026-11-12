@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { SectionHeading } from "@/components/landing/SectionHeading";
+import { COMPANY } from "@/lib/company";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Aapka Credit",
@@ -53,9 +54,10 @@ export default function PrivacyPolicyPage() {
             <h2>5. Contact Us</h2>
             <p>If you have questions or comments about this Privacy Policy, please contact us at:</p>
             <p>
-              Prism Cosmic Private Limited<br />
-              Email: privacy@prismcosmic.com<br />
-              Address: [Company Address, India]
+              {COMPANY.legalEntity}<br />
+              Email: {COMPANY.privacyEmail}<br />
+              Helpline: {COMPANY.helplineDisplay}<br />
+              Address: {COMPANY.address.formatted}
             </p>
           </div>
         </div>

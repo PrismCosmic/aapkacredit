@@ -25,9 +25,6 @@ export default function LoginPage() {
             <Image src={whitelogo} alt="Apka Credit" className="h-12 w-auto mb-4 dark:invert-0 invert" priority />
             <h1 className="text-2xl font-display font-semibold text-foreground tracking-tight">Admin Portal</h1>
             <p className="text-sm text-muted-foreground mt-1">Sign in to manage Aapka Credit</p>
-            <div className="mt-3 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs text-center font-medium">
-              ⚡ Standalone Test Mode: Enter any username/password (e.g. <code>admin</code> / <code>admin</code>) to test.
-            </div>
           </div>
 
           <form action={formAction} className="space-y-4">

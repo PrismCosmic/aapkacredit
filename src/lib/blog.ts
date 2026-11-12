@@ -33,7 +33,7 @@ export const blogPosts: BlogPost[] = [
       <p>Your repayment history accounts for 35% of your total credit score. Missing even a single EMI or credit card payment can significantly dent your score. Set up auto-debit facilities to ensure you never miss a deadline.</p>
 
       <h3>2. Maintain a Low Credit Utilization Ratio (CUR)</h3>
-      <p>The CUR is the percentage of your total available credit that you are currently using. Financial experts recommend keeping your CUR below 30%. For example, if your credit limit is ₹1,000,00, try not to spend more than ₹30,000.</p>
+      <p>The CUR is the percentage of your total available credit that you are currently using. Financial experts recommend keeping your CUR below 30%. For example, if your credit limit is ₹1,00,000, try not to spend more than ₹30,000.</p>
 
       <h3>3. Keep Old Credit Accounts Open</h3>
       <p>The length of your credit history matters. Older accounts show a longer track record of responsible credit behavior. Even if you don't use an old credit card frequently, keep it active to increase your average account age.</p>

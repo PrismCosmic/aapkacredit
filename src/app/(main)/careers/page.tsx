@@ -61,8 +61,9 @@ function FloatInput({
 export default function CareersPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", role: "", portfolio: "" });
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
+  const [submitting, setSubmitting] = useState(false);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
@@ -75,8 +76,27 @@ export default function CareersPage() {
       return;
     }
     setErrors({});
-    toast.success("Application received! We will contact you soon.");
-    setForm({ name: "", email: "", phone: "", role: "", portfolio: "" });
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/public/careers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) {
+        toast.error(data?.error || "Unable to submit application right now.");
+        return;
+      }
+      toast.success(
+        `Application ${data.applicationId || ""} received! Our talent team will contact you soon.`
+      );
+      setForm({ name: "", email: "", phone: "", role: "", portfolio: "" });
+    } catch {
+      toast.error("Network error while submitting application. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -178,8 +198,8 @@ export default function CareersPage() {
                 </div>
               </div>
               <div className="relative mt-6 flex justify-end">
-                <MagneticButton type="submit" variant="primary">
-                  Submit Application <Send className="h-4 w-4 ml-2" />
+                <MagneticButton type="submit" variant="primary" disabled={submitting}>
+                  {submitting ? "Submitting..." : "Submit Application"} <Send className="h-4 w-4 ml-2" />
                 </MagneticButton>
               </div>
             </form>

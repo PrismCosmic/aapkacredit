@@ -31,22 +31,6 @@ export default function BusinessLoanPage() {
     }
   };
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [{
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://aapkacredit.com"
-    },{
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Business Loan",
-      "item": "https://aapkacredit.com/business-loan"
-    }]
-  };
-
   const faqs = [
     {
       question: "Do I need to provide collateral for a business loan?",
@@ -61,19 +45,6 @@ export default function BusinessLoanPage() {
       answer: "Once your application and documents are verified, the loan amount is typically disbursed within 48 to 72 hours."
     }
   ];
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": f.answer
-      }
-    }))
-  };
 
   return (
     <main className="min-h-screen bg-background pt-32 pb-24">

@@ -1,34 +1,56 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { verifyCustomerJWT } from "@/lib/auth";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const token = req.cookies.get("customer_session")?.value;
+    const verified = token ? await verifyCustomerJWT(token) : null;
+    if (!verified) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
+
+    const keySecret = process.env.RAZORPAY_KEY_SECRET?.trim();
+    if (!keySecret) {
+      return NextResponse.json(
+        { error: "Payment verification secret is not configured on the server." },
+        { status: 503 }
+      );
+    }
+
     const body = await req.json();
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
-    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    if (
+      typeof razorpay_order_id !== "string" ||
+      typeof razorpay_payment_id !== "string" ||
+      typeof razorpay_signature !== "string" ||
+      !razorpay_order_id ||
+      !razorpay_payment_id ||
+      !razorpay_signature
+    ) {
       return NextResponse.json(
-        { detail: "Missing required fields: order_id, payment_id, and signature are required" },
+        { error: "Missing required Razorpay verification fields" },
         { status: 400 }
       );
     }
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET || "cSHhio7Tan70f6ML5c5134o3";
-
-    // Algorithm: HMAC-SHA256(order_id + "|" + payment_id, KEY_SECRET)
+    const payload = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = crypto
       .createHmac("sha256", keySecret)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+      .update(payload)
       .digest("hex");
 
-    const isMatch = crypto.timingSafeEqual(
-      Buffer.from(expectedSignature),
-      Buffer.from(razorpay_signature)
-    );
+    const expectedBuffer = Buffer.from(expectedSignature, "utf8");
+    const receivedBuffer = Buffer.from(razorpay_signature, "utf8");
 
-    if (!isMatch) {
+    const isSignatureValid =
+      expectedBuffer.length === receivedBuffer.length &&
+      crypto.timingSafeEqual(expectedBuffer, receivedBuffer);
+
+    if (!isSignatureValid) {
       return NextResponse.json(
-        { detail: "Invalid signature mismatch. Payment verification failed." },
+        { status: "failed", error: "Invalid payment signature" },
         { status: 400 }
       );
     }
@@ -39,10 +61,10 @@ export async function POST(req: Request) {
       order_id: razorpay_order_id,
       payment_id: razorpay_payment_id,
     });
-  } catch (error: any) {
-    console.error("Verify payment error:", error);
+  } catch (error) {
+    console.error("Verify Payment Error:", error);
     return NextResponse.json(
-      { detail: error.message || "Internal server error" },
+      { error: "Internal server error during payment verification" },
       { status: 500 }
     );
   }

@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "./providers";
+import { COMPANY } from "@/lib/company";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
@@ -61,14 +62,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Instant Loans & Credit | Aapka Credit India",
     description:
-      "Get instant personal, business & education loans up to ₹50L. Check eligibility in seconds — zero credit score impact, zero hidden fees.",
+      "Get instant personal, business & education loans through RBI-registered NBFC partners. Check eligibility in seconds — zero hidden fees.",
     url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
     locale: "en_IN",
     images: [
       {
-        url: `${SITE_URL}/og-image.png`,
+        url: `${SITE_URL}/og-image.svg`,
         width: 1200,
         height: 630,
         alt: "Aapka Credit — Instant Loans & Credit in India",
@@ -81,11 +82,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Instant Loans & Credit | Aapka Credit India",
     description:
-      "Get instant personal, business & education loans up to ₹50L. Check eligibility in seconds — zero credit score impact, zero hidden fees.",
-    // TODO: Replace with your actual X/Twitter handle
-    site: "@aapkacredit",
-    creator: "@prismcosmic",
-    images: [`${SITE_URL}/og-image.png`],
+      "Get instant personal, business & education loans through RBI-registered NBFC partners. Check eligibility in seconds — zero hidden fees.",
+    site: COMPANY.social.twitterHandle,
+    creator: COMPANY.social.twitterHandle,
+    images: [`${SITE_URL}/og-image.svg`],
   },
 
   robots: {
@@ -116,17 +116,17 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "FinancialService"],
   "@id": `${SITE_URL}/#organization`,
-  name: "Aapka Credit",
-  legalName: "Prism Cosmic Private Limited",
+  name: COMPANY.brandName,
+  legalName: COMPANY.legalEntity,
   url: SITE_URL,
   logo: {
     "@type": "ImageObject",
-    url: `${SITE_URL}/logo.png`,
+    url: `${SITE_URL}/logo.svg`,
     width: 200,
     height: 60,
   },
   description:
-    "Aapka Credit is India's next-generation digital lending platform offering instant personal loans, business loans, and education loans with transparent terms and zero hidden fees.",
+    "Aapka Credit is India's digital lending platform operated by Prism Cosmic Private Limited, connecting borrowers with RBI-registered NBFC lending partners for transparent personal, business, and education loans.",
   foundingDate: "2023",
   aggregateRating: {
     "@type": "AggregateRating",
@@ -139,26 +139,20 @@ const organizationSchema = {
     "@type": "Country",
     name: "India",
   },
-  // TODO: Replace with actual registered business address
   address: {
     "@type": "PostalAddress",
-    streetAddress: "TODO: Street Address",
-    addressLocality: "TODO: City",
-    addressRegion: "TODO: State",
-    postalCode: "TODO: PIN",
-    addressCountry: "IN",
+    streetAddress: COMPANY.address.line1,
+    addressLocality: COMPANY.address.city,
+    addressRegion: COMPANY.address.state,
+    postalCode: COMPANY.address.postalCode,
+    addressCountry: COMPANY.address.countryCode,
   },
-  // TODO: Replace with actual public phone number
-  telephone: "TODO: +91-XXXXXXXXXX",
-  email: "support@aapkacredit.com",
+  telephone: COMPANY.grievancePhone,
+  email: COMPANY.supportEmail,
   sameAs: [
-    "https://www.linkedin.com/showcase/aapkacredit/",
-    "https://www.instagram.com/aapkacredit",
-    "https://www.youtube.com/channel/UCqveHQesgiWUyAjeb9-YU3A",
-    // TODO: Add Facebook URL when available
-    // "https://www.facebook.com/aapkacredit",
-    // TODO: Add X/Twitter URL when available
-    // "https://x.com/aapkacredit",
+    COMPANY.social.linkedin,
+    COMPANY.social.instagram,
+    COMPANY.social.youtube,
   ],
   serviceType: "Digital Lending",
   hasOfferCatalog: {

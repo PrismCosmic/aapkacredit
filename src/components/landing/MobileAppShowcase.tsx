@@ -6,12 +6,33 @@ import { toast } from "sonner";
 
 export function MobileAppShowcase() {
   const [mobileForLink, setMobileForLink] = useState("");
+  const [sendingLink, setSendingLink] = useState(false);
 
-  const handleSendLink = (e: React.FormEvent) => {
+  const handleSendLink = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (mobileForLink.length >= 10) {
-      toast.success(`Download link sent to +91 ${mobileForLink}! Check your SMS.`);
+    const cleaned = mobileForLink.replace(/\D/g, "");
+    if (cleaned.length !== 10) {
+      toast.error("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+    setSendingLink(true);
+    try {
+      const res = await fetch("/api/public/app-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mobile: cleaned }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) {
+        toast.error(data?.error || "Unable to send app link right now.");
+        return;
+      }
+      toast.success(data.message || `Download link sent to +91 ${cleaned}! Check your SMS.`);
       setMobileForLink("");
+    } catch {
+      toast.error("Network error while requesting app download link.");
+    } finally {
+      setSendingLink(false);
     }
   };
 
@@ -89,9 +110,10 @@ export function MobileAppShowcase() {
                   </div>
                   <button
                     type="submit"
-                    className="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition shadow-xs whitespace-nowrap"
+                    disabled={sendingLink}
+                    className="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs rounded-xl transition shadow-xs whitespace-nowrap"
                   >
-                    Send App Link
+                    {sendingLink ? "Sending..." : "Send App Link"}
                   </button>
                 </form>
               </div>

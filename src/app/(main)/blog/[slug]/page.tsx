@@ -142,7 +142,7 @@ export default async function BlogPostPage({ params }: Props) {
             <MagneticButton href="/calculator" variant="ghost" className="bg-background">
               Calculate EMI
             </MagneticButton>
-            <MagneticButton href="/#home" variant="primary">
+            <MagneticButton href="/" variant="primary">
               Check Eligibility Now
             </MagneticButton>
           </div>

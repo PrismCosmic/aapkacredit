@@ -188,9 +188,9 @@ export function SubadminsManagementView({
   const handleToggleActive = async (sub: Subadmin) => {
     const updatedStatus = !sub.is_active;
     try {
-      const res = await updateSubadminPermissionsAction(sub.id, {
-        is_active: updatedStatus,
-      });
+      const res = updatedStatus
+        ? await updateSubadminPermissionsAction(sub.id, { is_active: true })
+        : await deactivateSubadminAction(sub.id);
       if (res.success) {
         toast.info(
           `Subadmin '${sub.username}' is now ${updatedStatus ? "ACTIVE" : "DEACTIVATED"}`
