@@ -24,14 +24,10 @@ export function SpotlightCard({
   return (
     <div
       ref={ref}
-      onMouseMove={onMove}
       className={cn(
-        "group relative overflow-hidden rounded-2xl glass transition-all duration-500 hover:-translate-y-1 hover:shadow-elegant",
+        "relative overflow-hidden rounded-2xl bg-card border border-border shadow-xs transition-colors duration-150 hover:border-border/80",
         className,
       )}
-      style={{
-        backgroundImage: `radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), ${spotlightColor}, transparent 60%)`,
-      }}
     >
       {children}
     </div>

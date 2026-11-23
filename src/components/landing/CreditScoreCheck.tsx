@@ -77,28 +77,24 @@ export function CreditScoreCheck() {
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-slate-50/60 border-t border-slate-200">
+    <section className="py-20 bg-white border-t border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden border border-slate-800">
+        <div className="bg-slate-900 rounded-2xl p-8 sm:p-10 text-white shadow-xs relative overflow-hidden border border-slate-800">
           
-          {/* Subtle Ambient Glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-
           <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
             {/* Left Content */}
-            <div className="lg:col-span-7 space-y-5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <Gauge className="w-3.5 h-3.5" /> Soft Eligibility & Bureau Estimator
+            <div className="lg:col-span-7 space-y-4">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                <Gauge className="w-3.5 h-3.5 text-blue-400" /> Credit eligibility estimator
               </span>
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-                Estimate Your Credit Eligibility With Zero Score Impact
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
+                Estimate your credit eligibility with zero score impact
               </h2>
 
               <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-                Know your indicative sanction tier before applying. Soft eligibility simulation with zero credit score deduction; official bureau underwriting and fee disclosures apply in the customer portal when you submit a loan application.
+                Know your indicative sanction tier before applying. Soft eligibility simulation with zero credit score deduction. Official bureau assessment and KFS disclosures are presented before sanction acceptance.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs text-slate-300">

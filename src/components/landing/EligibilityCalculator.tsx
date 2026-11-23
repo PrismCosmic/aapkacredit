@@ -27,63 +27,63 @@ export function EligibilityCalculator() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 mb-3">
-            <Calculator className="w-3.5 h-3.5" /> FOIR Assessment Tool
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 mb-3">
+            <Calculator className="w-3.5 h-3.5" /> FOIR assessment tool
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Check Your Maximum Borrowing Capacity In Real Time
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+            Check your borrowing capacity in real time
           </h2>
           <p className="mt-3 text-base text-slate-600">
-            Our instant underwriting algorithm uses standard RBI FOIR guidelines to estimate how much loan you can comfortably afford.
+            Based on standard RBI Fixed Obligation to Income Ratio (FOIR) guidelines to ensure manageable debt.
           </p>
         </div>
 
         {/* Calculator Main Box */}
-        <div className="bg-slate-50/80 rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm max-w-5xl mx-auto">
+        <div className="bg-slate-50/80 rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
             {/* Left Controls */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-7 space-y-5">
               
               {/* Employment Type Selector */}
               <div>
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block mb-2.5">
-                  Employment Status
+                <label className="text-xs font-medium text-slate-500 block mb-2">
+                  Employment status
                 </label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   <button
                     type="button"
                     onClick={() => setEmpType("salaried")}
-                    className={`py-3 px-4 rounded-xl font-bold text-sm border transition text-center ${
+                    className={`py-2.5 px-4 rounded-lg font-medium text-xs border transition text-center ${
                       empType === "salaried"
-                        ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                        ? "bg-slate-900 text-white border-slate-900 shadow-xs"
                         : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
                     }`}
                   >
-                    Salaried Professional
+                    Salaried professional
                   </button>
                   <button
                     type="button"
                     onClick={() => setEmpType("self-employed")}
-                    className={`py-3 px-4 rounded-xl font-bold text-sm border transition text-center ${
+                    className={`py-2.5 px-4 rounded-lg font-medium text-xs border transition text-center ${
                       empType === "self-employed"
-                        ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                        ? "bg-slate-900 text-white border-slate-900 shadow-xs"
                         : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
                     }`}
                   >
-                    Self-Employed / Business
+                    Self-employed / Business
                   </button>
                 </div>
               </div>
 
               {/* Slider 1: Monthly Income */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                    Net Monthly Take-Home Income
+                  <label className="text-xs font-medium text-slate-500">
+                    Net monthly take-home income
                   </label>
-                  <span className="text-lg font-black text-blue-600">₹{income.toLocaleString("en-IN")}</span>
+                  <span className="text-base font-semibold text-blue-600 font-mono tabular-nums">₹{income.toLocaleString("en-IN")}</span>
                 </div>
                 <input
                   type="range"
@@ -92,21 +92,21 @@ export function EligibilityCalculator() {
                   step={5000}
                   value={income}
                   onChange={(e) => setIncome(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
-                <div className="flex justify-between text-xs text-slate-400 font-medium">
+                <div className="flex justify-between text-[11px] text-slate-400 font-mono">
                   <span>₹15,000 / mo</span>
                   <span>₹3,00,000 / mo</span>
                 </div>
               </div>
 
               {/* Slider 2: Existing EMIs */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                    Existing Monthly Loan EMIs (if any)
+                  <label className="text-xs font-medium text-slate-500">
+                    Existing monthly loan EMIs (if any)
                   </label>
-                  <span className="text-lg font-black text-slate-900">₹{existingEmi.toLocaleString("en-IN")}</span>
+                  <span className="text-base font-semibold text-slate-900 font-mono tabular-nums">₹{existingEmi.toLocaleString("en-IN")}</span>
                 </div>
                 <input
                   type="range"
@@ -115,10 +115,10 @@ export function EligibilityCalculator() {
                   step={2000}
                   value={existingEmi}
                   onChange={(e) => setExistingEmi(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                 />
-                <div className="flex justify-between text-xs text-slate-400 font-medium">
-                  <span>₹0 (No existing loans)</span>
+                <div className="flex justify-between text-[11px] text-slate-400 font-mono">
+                  <span>₹0 (no existing loans)</span>
                   <span>₹1,00,000 / mo</span>
                 </div>
               </div>
@@ -126,16 +126,16 @@ export function EligibilityCalculator() {
             </div>
 
             {/* Right Sanction Result Card */}
-            <div className="lg:col-span-5 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-md flex flex-col justify-between text-center relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-                Instant Sanction
+            <div className="lg:col-span-5 bg-white rounded-xl p-6 sm:p-7 border border-slate-200 shadow-xs flex flex-col justify-between text-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-medium px-2.5 py-0.5 rounded-bl-lg">
+                Sanction estimate
               </div>
 
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-1">
-                  You Are Eligible For Up To
+                <span className="text-xs font-medium text-slate-500 block mb-1">
+                  Estimated eligible borrowing limit
                 </span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-600 mb-2">
+                <div className="text-3xl font-bold text-slate-900 font-mono tabular-nums mb-1">
                   ₹{eligibleAmount > 0 ? eligibleAmount.toLocaleString("en-IN") : "0"}
                 </div>
                 <p className="text-xs text-slate-500">
@@ -143,10 +143,10 @@ export function EligibilityCalculator() {
                 </p>
 
                 {/* Breakdown Details */}
-                <div className="mt-6 pt-5 border-t border-slate-100 space-y-2.5 text-xs text-left">
+                <div className="mt-5 pt-4 border-t border-slate-100 space-y-2 text-xs text-left">
                   <div className="flex justify-between text-slate-600">
-                    <span>Safe Disposable EMI</span>
-                    <span className="font-bold text-slate-900">₹{maxAllowableEmi.toLocaleString("en-IN")} / mo</span>
+                    <span>Safe disposable EMI</span>
+                    <span className="font-semibold text-slate-900 font-mono tabular-nums">₹{maxAllowableEmi.toLocaleString("en-IN")} / mo</span>
                   </div>
                   <div className="flex justify-between text-slate-600">
                     <span>FOIR Ratio</span>

@@ -129,7 +129,7 @@ export function RepaymentsTable({ initialRepayments = [] }: { initialRepayments?
             placeholder="Search repayments by ID, loan ID, customer..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-card/50 border-border"
+            className="pl-9 bg-background border-border"
           />
         </div>
 
@@ -149,7 +149,7 @@ export function RepaymentsTable({ initialRepayments = [] }: { initialRepayments?
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-border bg-card/50 backdrop-blur overflow-hidden">
+      <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-border">
@@ -178,17 +178,17 @@ export function RepaymentsTable({ initialRepayments = [] }: { initialRepayments?
                   <p className="text-xs text-muted-foreground font-mono">{rep.loanId}</p>
                 </TableCell>
                 <TableCell>
-                  <p className="font-bold text-foreground">₹{rep.amount.toLocaleString()}</p>
+                  <p className="font-mono font-bold text-foreground tabular-nums">₹{rep.amount.toLocaleString()}</p>
                   {rep.penalCharge > 0 && (
-                    <p className="text-[11px] text-destructive font-medium">
+                    <p className="font-mono text-[11px] text-destructive font-medium tabular-nums">
                       + ₹{rep.penalCharge} Late Fee
                     </p>
                   )}
                 </TableCell>
                 <TableCell className="text-xs">
-                  <span className="font-medium text-foreground">{rep.dueDate}</span>
+                  <span className="font-mono font-medium text-foreground tabular-nums">{rep.dueDate}</span>
                   {rep.paidDate && (
-                    <span className="block text-[10px] text-success">Paid: {rep.paidDate}</span>
+                    <span className="font-mono block text-[10px] text-success tabular-nums">Paid: {rep.paidDate}</span>
                   )}
                 </TableCell>
                 <TableCell className="text-xs text-muted-foreground">

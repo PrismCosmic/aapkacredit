@@ -86,14 +86,14 @@ export function AuditLogsViewer({ initialLogs, meta }: { initialLogs: any[]; met
       </div>
 
       {/* Filter and Search Bar */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-card border-border shadow-xs">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="relative w-full md:w-96">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search actor, action, details, IP address..."
-                className="pl-9 bg-background/50 border-border text-xs"
+                className="pl-9 bg-background border-border text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -101,7 +101,7 @@ export function AuditLogsViewer({ initialLogs, meta }: { initialLogs: any[]; met
 
             <div className="flex flex-wrap gap-2 w-full md:w-auto">
               <Select value={moduleFilter} onValueChange={setModuleFilter}>
-                <SelectTrigger className="w-[150px] bg-background/50 border-border text-xs h-9">
+                <SelectTrigger className="w-[150px] bg-background border-border text-xs h-9">
                   <SelectValue placeholder="Module" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -114,7 +114,7 @@ export function AuditLogsViewer({ initialLogs, meta }: { initialLogs: any[]; met
               </Select>
 
               <Select value={severityFilter} onValueChange={setSeverityFilter}>
-                <SelectTrigger className="w-[140px] bg-background/50 border-border text-xs h-9">
+                <SelectTrigger className="w-[140px] bg-background border-border text-xs h-9">
                   <SelectValue placeholder="Severity" />
                 </SelectTrigger>
                 <SelectContent className="bg-popover border-border">
@@ -130,7 +130,7 @@ export function AuditLogsViewer({ initialLogs, meta }: { initialLogs: any[]; met
       </Card>
 
       {/* Main Audit Table */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-card border-border shadow-xs">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Activity className="h-5 w-5 text-primary" />
@@ -143,14 +143,14 @@ export function AuditLogsViewer({ initialLogs, meta }: { initialLogs: any[]; met
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
-              <thead className="text-[11px] uppercase bg-muted/30 text-muted-foreground border-b border-border">
+              <thead className="text-[11px] bg-muted/40 text-muted-foreground border-b border-border">
                 <tr>
-                  <th className="px-4 py-3">Timestamp & ID</th>
-                  <th className="px-4 py-3">Actor & Source IP</th>
-                  <th className="px-4 py-3">Action Type</th>
-                  <th className="px-4 py-3">Module & Entity</th>
-                  <th className="px-4 py-3">Details / Audit Payload</th>
-                  <th className="px-4 py-3 text-right">Severity</th>
+                  <th className="px-4 py-3 font-medium">Timestamp & ID</th>
+                  <th className="px-4 py-3 font-medium">Actor & Source IP</th>
+                  <th className="px-4 py-3 font-medium">Action Type</th>
+                  <th className="px-4 py-3 font-medium">Module & Entity</th>
+                  <th className="px-4 py-3 font-medium">Details / Audit Payload</th>
+                  <th className="px-4 py-3 font-medium text-right">Severity</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">

@@ -46,8 +46,8 @@ export function Education() {
         {/* Section Heading */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 mb-3">
-              Financial Knowledge Hub
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mb-3">
+              Financial knowledge hub
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
               Borrow Smarter With Expert Financial Insights
@@ -58,9 +58,9 @@ export function Education() {
           </div>
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-blue-600 hover:text-blue-700 transition"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 transition"
           >
-            <span>Explore All Financial Guides</span>
+            <span>Explore all financial guides</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -73,29 +73,29 @@ export function Education() {
               <Link
                 key={art.title}
                 href={art.href}
-                className="bg-slate-50/80 hover:bg-white rounded-3xl p-6 border border-slate-200/90 hover:border-blue-300 shadow-xs hover:shadow-md transition duration-300 flex flex-col justify-between group"
+                className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between group hover:border-slate-300 transition"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
-                      <Icon className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100">
+                      <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200/60">
                       {art.read}
                     </span>
                   </div>
-                  <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider block mb-1">
+                  <span className="text-xs font-medium text-blue-700 block mb-1">
                     {art.category}
                   </span>
-                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
+                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition mb-2">
                     {art.title}
                   </h3>
                   <p className="text-xs text-slate-600 leading-relaxed">{art.desc}</p>
                 </div>
 
-                <div className="mt-6 pt-3 border-t border-slate-200/70 flex items-center gap-1 text-xs font-bold text-blue-600">
-                  <span>Read Article</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center gap-1 text-xs font-semibold text-blue-600">
+                  <span>Read article</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </div>
               </Link>
             );

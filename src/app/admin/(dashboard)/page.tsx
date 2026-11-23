@@ -14,9 +14,9 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-foreground">Executive Mission Control</h2>
-        <p className="text-muted-foreground">
-          Welcome back to AapkaCredit Admin. Real-time platform metrics, loan disbursements, and active credit lines.
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">Platform Overview</h1>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          Real-time applications, credit assessments, loan disbursements, and recovery metrics.
         </p>
       </div>
 

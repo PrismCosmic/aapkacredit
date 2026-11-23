@@ -44,7 +44,7 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       {/* ── Top Micro Announcement Bar ── */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 text-white text-[11px] font-medium py-1 px-4 text-center flex items-center justify-center gap-2">
+      <div className="bg-slate-900 text-slate-300 text-xs font-normal py-1.5 px-4 text-center flex items-center justify-center gap-2 border-b border-slate-800">
         <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
         <span>RBI Regulated NBFC Lending Partners • 100% Paperless DigiLocker e-KYC • Instant Disbursal</span>
       </div>
@@ -52,8 +52,8 @@ export function Navbar() {
       {/* ── Main Navigation ── */}
       <nav
         className={cn(
-          "w-full transition-all duration-300 bg-white/95 backdrop-blur-md border-b",
-          scrolled ? "py-2.5 shadow-sm border-slate-200" : "py-3.5 border-slate-200/60"
+          "w-full transition-colors duration-200 bg-white/95 backdrop-blur-md border-b",
+          scrolled ? "py-2.5 shadow-xs border-slate-200" : "py-3 border-slate-200/80"
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex items-center justify-between">

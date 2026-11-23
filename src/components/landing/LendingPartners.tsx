@@ -50,8 +50,8 @@ export function LendingPartners() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-3">
-            <ShieldCheck className="w-3.5 h-3.5" /> 100% Regulated Ecosystem
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mb-3">
+            <ShieldCheck className="w-3.5 h-3.5 text-slate-500" /> Regulated lending ecosystem
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Our Regulated Lending Partners & Technology Network
@@ -66,20 +66,20 @@ export function LendingPartners() {
           {partners.map((p) => (
             <div
               key={p.name}
-              className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between"
+              className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/60 text-blue-600 flex items-center justify-center">
-                    <Building className="w-5 h-5" />
+                  <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-200/60 text-blue-600 flex items-center justify-center">
+                    <Building className="w-4 h-4" />
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                     {p.badge}
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 mb-1">{p.name}</h3>
+                <h3 className="text-sm font-bold text-slate-900 mb-1">{p.name}</h3>
                 <p className="text-xs text-slate-500 font-medium">{p.type}</p>
-                <p className="text-[11px] text-blue-600 font-semibold mt-1">CIN / Reg: {p.regNo}</p>
+                <p className="text-[11px] font-mono text-blue-600 font-medium mt-1">CIN / Reg: {p.regNo}</p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -91,10 +91,10 @@ export function LendingPartners() {
         </div>
 
         {/* Infrastructure & Banking APIs Strip */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs">
+        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
             <div>
-              <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
+              <h4 className="text-sm font-semibold text-slate-900">
                 Authorized National Digital Infrastructure Integrations
               </h4>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -103,9 +103,9 @@ export function LendingPartners() {
             </div>
             <Link
               href="/compliance"
-              className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 transition"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 transition"
             >
-              <span>View Full Fair Practices Code</span>
+              <span>View full Fair Practices Code</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </Link>
           </div>

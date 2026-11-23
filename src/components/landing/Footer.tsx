@@ -68,7 +68,7 @@ export function Footer() {
 
           {/* Col 2: Loan Products */}
           <div>
-            <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Loan Products</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Loan Products</h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link href="/personal-loan" className="hover:text-blue-400 transition">
@@ -100,7 +100,7 @@ export function Footer() {
 
           {/* Col 3: Company & Trust */}
           <div>
-            <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Company & Governance</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Company & Governance</h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link href="/about" className="hover:text-blue-400 transition">
@@ -132,7 +132,7 @@ export function Footer() {
 
           {/* Col 4: Legal & Policies */}
           <div>
-            <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Legal & RBI Policy</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Legal & RBI Policy</h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li>
                 <Link href="/privacy-policy" className="hover:text-blue-400 transition">
@@ -183,7 +183,7 @@ export function Footer() {
               <Lock className="w-3.5 h-3.5" /> 256-Bit SSL Encrypted
             </span>
             <span>•</span>
-            <span>Made with pride in India 🇮🇳</span>
+            <span>Made with pride in India</span>
           </div>
         </div>
 

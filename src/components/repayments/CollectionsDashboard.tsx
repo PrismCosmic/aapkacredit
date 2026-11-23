@@ -87,63 +87,63 @@ export function CollectionsDashboard({ initialRepayments = [] }: { initialRepaym
 
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="bg-success/10 border-success/30 backdrop-blur">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-success">Cleared Collections</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-success" />
+            <CardTitle className="text-xs font-medium text-muted-foreground">Cleared Collections</CardTitle>
+            <CheckCircle2 className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">
+            <div className="text-2xl font-mono font-bold text-emerald-500 tabular-nums">
               ₹{totalCollected.toLocaleString()}
             </div>
-            <p className="text-xs text-success/80 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {paidRepayments.length} EMIs successfully cleared
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-amber-500/10 border-amber-500/30 backdrop-blur">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-amber-500">Scheduled / Upcoming</CardTitle>
+            <CardTitle className="text-xs font-medium text-muted-foreground">Scheduled / Upcoming</CardTitle>
             <Clock className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-500">
+            <div className="text-2xl font-mono font-bold text-amber-500 tabular-nums">
               ₹{totalUpcoming.toLocaleString()}
             </div>
-            <p className="text-xs text-amber-500/80 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {pendingRepayments.length} scheduled eNACH debits
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-destructive/10 border-destructive/30 backdrop-blur">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-destructive">Delinquent / Overdue</CardTitle>
+            <CardTitle className="text-xs font-medium text-muted-foreground">Delinquent / Overdue</CardTitle>
             <AlertCircle className="h-4 w-4 text-destructive" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-destructive">
+            <div className="text-2xl font-mono font-bold text-destructive tabular-nums">
               ₹{totalOverdue.toLocaleString()}
             </div>
-            <p className="text-xs text-destructive/80 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {overdueRepayments.length} accounts in collection bucket
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-primary/10 border-primary/30 backdrop-blur">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-primary">Collection Efficiency</CardTitle>
+            <CardTitle className="text-xs font-medium text-muted-foreground">Collection Efficiency</CardTitle>
             <TrendingUp className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">
+            <div className="text-2xl font-mono font-bold text-foreground tabular-nums">
               {totalCollected + totalOverdue > 0
                 ? `${((totalCollected / (totalCollected + totalOverdue)) * 100).toFixed(1)}%`
                 : "0.0%"}
             </div>
-            <p className="text-xs text-primary/80 mt-1">On-time repayment rate</p>
+            <p className="text-xs text-muted-foreground mt-1">On-time repayment rate</p>
           </CardContent>
         </Card>
       </div>

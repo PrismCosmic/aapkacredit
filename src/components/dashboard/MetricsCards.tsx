@@ -61,16 +61,16 @@ export function MetricsCards({ initialData }: { initialData?: any }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric) => (
-        <Card key={metric.title} className="bg-card/50 backdrop-blur border-border shadow-sm">
+        <Card key={metric.title} className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+            <CardTitle className="text-xs font-medium text-muted-foreground">
               {metric.title}
             </CardTitle>
-            <metric.icon className="h-4 w-4 text-primary" />
+            <metric.icon className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{metric.value}</div>
-            <p className="text-xs mt-1 text-muted-foreground">{metric.subtitle}</p>
+            <div className="text-2xl font-semibold text-foreground font-mono tabular-nums">{metric.value}</div>
+            <p className="text-[11px] mt-1 text-muted-foreground">{metric.subtitle}</p>
           </CardContent>
         </Card>
       ))}

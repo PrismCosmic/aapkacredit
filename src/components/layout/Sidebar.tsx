@@ -44,20 +44,20 @@ export function Sidebar() {
     <div className="flex h-full w-64 flex-col bg-sidebar border-r border-sidebar-border text-sidebar-foreground">
       <div className="flex h-16 shrink-0 items-center px-6">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-glow">
-            <Wallet className="h-5 w-5 text-primary-foreground" />
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
+            <Wallet className="h-4 w-4 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold tracking-tight font-display text-sidebar-foreground">Aapka Credit</span>
+          <span className="text-lg font-semibold tracking-tight text-sidebar-foreground">Aapka Credit</span>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col overflow-y-auto px-4 py-4 space-y-6">
+      <div className="flex flex-1 flex-col overflow-y-auto px-3 py-4 space-y-6">
         {/* Operations */}
         <div>
-          <h3 className="px-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+          <h3 className="px-3 text-xs font-medium text-muted-foreground/80 mb-1.5">
             Operations
           </h3>
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {operationsNav.map((item) => {
               const isActive = pathname === item.href || (pathname.startsWith(`${item.href}/`) && item.href !== "/admin");
               return (
@@ -66,9 +66,9 @@ export function Sidebar() {
                   href={item.href}
                   className={cn(
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                       : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
-                    "group flex items-center rounded-md px-3 py-2 text-xs font-medium transition-colors"
+                    "group flex items-center rounded-md px-3 py-2 text-xs font-normal transition-colors"
                   )}
                 >
                   <item.icon
@@ -87,10 +87,10 @@ export function Sidebar() {
 
         {/* Governance & Support */}
         <div>
-          <h3 className="px-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-            Governance & Support
+          <h3 className="px-3 text-xs font-medium text-muted-foreground/80 mb-1.5">
+            Governance & support
           </h3>
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {governanceNav.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
@@ -99,9 +99,9 @@ export function Sidebar() {
                   href={item.href}
                   className={cn(
                     isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                       : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
-                    "group flex items-center rounded-md px-3 py-2 text-xs font-medium transition-colors"
+                    "group flex items-center rounded-md px-3 py-2 text-xs font-normal transition-colors"
                   )}
                 >
                   <item.icon
@@ -120,20 +120,20 @@ export function Sidebar() {
 
         {/* Settings & Logout */}
         <div className="pt-2 border-t border-border/50">
-          <h3 className="px-3 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+          <h3 className="px-3 text-xs font-medium text-muted-foreground/80 mb-1.5">
             Configuration
           </h3>
           <Link
             href="/admin/settings"
             className={cn(
               pathname === "/admin/settings"
-                ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                 : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
-              "group flex items-center rounded-md px-3 py-2 text-xs font-medium transition-colors"
+              "group flex items-center rounded-md px-3 py-2 text-xs font-normal transition-colors"
             )}
           >
             <Settings className="mr-3 h-4 w-4 shrink-0 text-muted-foreground group-hover:text-sidebar-foreground transition-colors" aria-hidden="true" />
-            Platform Settings & Risk
+            Platform settings & risk
           </Link>
           <form action={logoutAction} className="mt-1">
             <button

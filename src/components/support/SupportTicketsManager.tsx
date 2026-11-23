@@ -381,6 +381,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
           <div className="rounded-xl border border-border bg-muted/30 p-4 flex flex-col items-center justify-center min-h-[200px] gap-3">
             {previewAttachment?.url ? (
               <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewAttachment.url}
                   alt={previewAttachment.name}

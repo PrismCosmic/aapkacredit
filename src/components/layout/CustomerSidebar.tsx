@@ -29,7 +29,7 @@ export function CustomerSidebar() {
     <div className="flex h-full w-64 flex-col bg-sidebar border-r border-sidebar-border text-sidebar-foreground">
       <div className="flex h-16 shrink-0 items-center px-6">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-glow">
+          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
             <Image src={whitelogo} alt="Aapka Credit" className="h-5 w-5 dark:invert-0 invert" />
           </div>
           <span className="text-xl font-bold tracking-tight font-display text-sidebar-foreground">Aapka Credit</span>

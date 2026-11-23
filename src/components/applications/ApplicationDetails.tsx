@@ -1226,9 +1226,9 @@ export function ApplicationDetails({
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="relative group overflow-hidden rounded-xl border border-border aspect-square bg-muted/40">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   {liveCapture.selfie_url ? (
                     <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={liveCapture.selfie_url}
                         alt="Live Captured User Selfie"

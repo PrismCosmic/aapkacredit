@@ -61,7 +61,7 @@ function FloatInput({
       )}
       <label
         htmlFor={id}
-        className="pointer-events-none absolute left-4 top-2 text-[10px] uppercase font-bold tracking-wider text-slate-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs"
+        className="pointer-events-none absolute left-4 top-2 text-[11px] font-medium text-slate-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs"
       >
         {label}
       </label>
@@ -127,8 +127,8 @@ export function Contact() {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 mb-3 border border-blue-200">
-            Get In Touch
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mb-3">
+            Get in touch
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Speak With Our Digital Lending Advisors

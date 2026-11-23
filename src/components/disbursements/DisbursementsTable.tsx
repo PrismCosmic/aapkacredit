@@ -82,46 +82,46 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
     <div className="space-y-6">
       {/* Metric Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Total Payout Volume</CardTitle>
             <IndianRupee className="h-4 w-4 text-emerald-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-400">₹{totalDisbursed.toLocaleString()}</div>
+            <div className="text-2xl font-mono font-bold text-emerald-400 tabular-nums">₹{totalDisbursed.toLocaleString()}</div>
             <p className="text-[11px] text-muted-foreground mt-1">Disbursed via automated IMPS rails</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Successful Transfers</CardTitle>
             <CheckCircle2 className="h-4 w-4 text-emerald-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{successCount}</div>
+            <div className="text-2xl font-mono font-bold text-foreground tabular-nums">{successCount}</div>
             <p className="text-[11px] text-muted-foreground mt-1">Confirmed with bank UTR numbers</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Pending in Transit</CardTitle>
             <Clock className="h-4 w-4 text-amber-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-amber-400">{pendingCount}</div>
+            <div className="text-2xl font-mono font-bold text-amber-400 tabular-nums">{pendingCount}</div>
             <p className="text-[11px] text-muted-foreground mt-1">Processing via payment gateway nodes</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-card border-border shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Gateway Rails Health</CardTitle>
             <Zap className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">
+            <div className="text-2xl font-mono font-bold text-foreground tabular-nums">
               {disbursements.length > 0
                 ? `${((disbursements.filter((d) => d.status === "SUCCESS").length / disbursements.length) * 100).toFixed(1)}%`
                 : "0.0%"}
@@ -132,21 +132,21 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
       </div>
 
       {/* Filter and Search Bar */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-card border-border shadow-xs">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="relative w-full md:w-96">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search recipient, bank, UTR, loan ID..."
-                className="pl-9 bg-background/50 border-border text-xs"
+                className="pl-9 bg-background border-border text-xs"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
 
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[150px] bg-background/50 border-border text-xs h-9">
+              <SelectTrigger className="w-[150px] bg-background border-border text-xs h-9">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent className="bg-popover border-border">
@@ -161,7 +161,7 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
       </Card>
 
       {/* Main Table */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-card border-border shadow-xs">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Banknote className="h-5 w-5 text-primary" />
@@ -174,15 +174,15 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
-              <thead className="text-[11px] uppercase bg-muted/30 text-muted-foreground border-b border-border">
+              <thead className="text-[11px] bg-muted/40 text-muted-foreground border-b border-border">
                 <tr>
-                  <th className="px-4 py-3">Payout ID & Date</th>
-                  <th className="px-4 py-3">Borrower & Loan ID</th>
-                  <th className="px-4 py-3">Gross / Net Amount</th>
-                  <th className="px-4 py-3">Destination Bank</th>
-                  <th className="px-4 py-3">Gateway & UTR</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3 text-right">Action</th>
+                  <th className="px-4 py-3 font-medium">Payout ID & Date</th>
+                  <th className="px-4 py-3 font-medium">Borrower & Loan ID</th>
+                  <th className="px-4 py-3 font-medium">Gross / Net Amount</th>
+                  <th className="px-4 py-3 font-medium">Destination Bank</th>
+                  <th className="px-4 py-3 font-medium">Gateway & UTR</th>
+                  <th className="px-4 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 font-medium text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -193,8 +193,8 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
                   return (
                     <tr key={item.id} className="hover:bg-muted/20 transition-colors">
                       <td className="px-4 py-3 font-medium">
-                        <div className="font-mono">{item.id}</div>
-                        <div className="text-[10px] text-muted-foreground">
+                        <div className="font-mono tabular-nums">{item.id}</div>
+                        <div className="text-[10px] text-muted-foreground font-mono tabular-nums">
                           {new Date(item.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </div>
                       </td>
@@ -207,8 +207,8 @@ export function DisbursementsTable({ initialData, meta }: { initialData: any[]; 
                       </td>
 
                       <td className="px-4 py-3">
-                        <div className="font-bold text-foreground">₹{item.net_disbursed.toLocaleString()}</div>
-                        <div className="text-[10px] text-muted-foreground">
+                        <div className="font-mono font-bold text-foreground tabular-nums">₹{item.net_disbursed.toLocaleString()}</div>
+                        <div className="text-[10px] text-muted-foreground font-mono tabular-nums">
                           Gross: ₹{item.amount.toLocaleString()} (-₹{item.processing_fee} fee)
                         </div>
                       </td>

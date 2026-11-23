@@ -10,7 +10,7 @@ const stats = [
     suffix: " Lakh+",
     label: "Registered Users",
     sub: "Across 2,400+ pin codes in India",
-    color: "text-blue-600 bg-blue-50",
+    color: "text-blue-600 bg-blue-50 border border-blue-100",
   },
   {
     icon: IndianRupee,
@@ -18,7 +18,7 @@ const stats = [
     suffix: "+ Cr",
     label: "Total Disbursed",
     sub: "Directly into verified bank accounts",
-    color: "text-emerald-600 bg-emerald-50",
+    color: "text-emerald-700 bg-emerald-50 border border-emerald-100",
   },
   {
     icon: Zap,
@@ -26,15 +26,15 @@ const stats = [
     suffix: " Mins",
     label: "Sanction Decision",
     sub: "Powered by instant bureau analytics",
-    color: "text-amber-600 bg-amber-50",
+    color: "text-blue-600 bg-blue-50 border border-blue-100",
   },
   {
     icon: ThumbsUp,
     value: 99.4,
     suffix: "%",
-    label: "Happy Borrowers",
-    sub: "Rated 4.8★ on Google Play Store",
-    color: "text-purple-600 bg-purple-50",
+    label: "Customer Satisfaction",
+    sub: "Verified post-disbursement feedback",
+    color: "text-slate-700 bg-slate-100 border border-slate-200",
   },
 ];
 
@@ -48,15 +48,15 @@ export function Stats() {
             return (
               <div
                 key={s.label}
-                className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 text-center flex flex-col items-center justify-between shadow-xs hover:shadow-md transition"
+                className="bg-slate-50 rounded-xl p-6 border border-slate-200 text-center flex flex-col items-center justify-between shadow-xs"
               >
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${s.color}`}>
-                  <Icon className="w-6 h-6" />
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${s.color}`}>
+                  <Icon className="w-5 h-5" />
                 </div>
-                <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-1">
+                <div className="font-mono text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-1 tabular-nums">
                   <CountUp to={s.value} suffix={s.suffix} />
                 </div>
-                <p className="text-sm font-bold text-slate-800">{s.label}</p>
+                <p className="text-sm font-semibold text-slate-800">{s.label}</p>
                 <p className="text-xs text-slate-500 mt-1">{s.sub}</p>
               </div>
             );

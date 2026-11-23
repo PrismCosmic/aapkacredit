@@ -89,7 +89,7 @@ export function ApplicationQueueTable({
   }, [applications, search, riskFilter, statusFilter]);
 
   return (
-    <div className="rounded-xl border border-border bg-card/50 backdrop-blur overflow-hidden">
+    <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
       {/* Search and Filters Header */}
       <div className="p-4 border-b border-border flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2 w-full max-w-sm">
@@ -99,7 +99,7 @@ export function ApplicationQueueTable({
               placeholder="Search by ID, name, mobile..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 bg-background/50 border-border"
+              className="pl-9 bg-background border-border"
             />
           </div>
           <Button
@@ -184,13 +184,13 @@ export function ApplicationQueueTable({
                   <p className="text-xs text-muted-foreground">{app.mobile}</p>
                 </div>
               </TableCell>
-              <TableCell className="font-bold text-foreground">
+              <TableCell className="font-mono font-bold text-foreground tabular-nums">
                 ₹{Number(app.amount).toLocaleString()}
               </TableCell>
-              <TableCell className="text-muted-foreground">{app.tenure} mo</TableCell>
+              <TableCell className="font-mono text-xs text-muted-foreground tabular-nums">{app.tenure} mo</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-xs">{app.cibil}</span>
+                  <span className="font-mono font-medium text-xs tabular-nums">{app.cibil}</span>
                   <Badge
                     variant="outline"
                     className={`text-[10px] px-1.5 py-0 ${
@@ -220,7 +220,7 @@ export function ApplicationQueueTable({
                   {app.status.replace(/_/g, " ")}
                 </Badge>
               </TableCell>
-              <TableCell className="text-xs text-muted-foreground">{app.date}</TableCell>
+              <TableCell className="font-mono text-xs text-muted-foreground tabular-nums">{app.date}</TableCell>
               <TableCell className="text-right">
                 <Button variant="outline" size="sm" asChild className="h-8 border-border hover:bg-primary hover:text-primary-foreground">
                   <Link href={`/admin/applications/${app.id}`}>

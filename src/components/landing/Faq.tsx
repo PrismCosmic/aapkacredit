@@ -56,8 +56,8 @@ export function Faq() {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 mb-3">
-            <HelpCircle className="w-3.5 h-3.5" /> Got Questions?
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 mb-3">
+            <HelpCircle className="w-3.5 h-3.5 text-slate-500" /> Frequently asked questions
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Frequently Asked Questions
@@ -68,7 +68,7 @@ export function Faq() {
         </div>
 
         {/* Accordion List */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+        <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs">
           <Accordion type="single" collapsible className="space-y-2">
             {faqs.map((f, i) => (
               <AccordionItem
@@ -76,7 +76,7 @@ export function Faq() {
                 value={`item-${i}`}
                 className="border-b border-slate-100 last:border-b-0 py-2"
               >
-                <AccordionTrigger className="text-left text-base font-bold text-slate-900 hover:text-blue-600 transition hover:no-underline py-4">
+                <AccordionTrigger className="text-left text-base font-semibold text-slate-900 hover:text-blue-600 transition hover:no-underline py-4">
                   {f.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-slate-600 leading-relaxed pb-4">

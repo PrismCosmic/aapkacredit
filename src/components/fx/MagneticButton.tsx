@@ -9,6 +9,7 @@ export function MagneticButton({
   onClick,
   variant = "primary",
   type,
+  disabled,
 }: {
   children: ReactNode;
   className?: string;
@@ -16,6 +17,7 @@ export function MagneticButton({
   onClick?: () => void;
   variant?: "primary" | "ghost";
   type?: "button" | "submit";
+  disabled?: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
 
@@ -33,29 +35,22 @@ export function MagneticButton({
   }
 
   const base =
-    "relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300";
+    "relative inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-xs font-medium transition-colors duration-150";
   const styles =
     variant === "primary"
-      ? "text-white shadow-glow hover:shadow-[0_28px_90px_-20px_rgba(59,130,246,0.7)]"
-      : "glass text-white/90 hover:text-white";
+      ? "bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+      : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700";
 
   const inner = (
     <span
       ref={ref}
-      className="relative z-10 pointer-events-none inline-flex items-center gap-2 transition-transform duration-200 ease-out"
+      className="relative z-10 pointer-events-none inline-flex items-center gap-2"
     >
       {children}
     </span>
   );
 
-  const bg =
-    variant === "primary" ? (
-      <span
-        aria-hidden
-        className="absolute inset-0 rounded-full"
-        style={{ background: "linear-gradient(135deg, #2563EB 0%, #3B82F6 60%, #10B981 130%)" }}
-      />
-    ) : null;
+  const bg = null;
 
   if (href) {
     return (
@@ -74,9 +69,10 @@ export function MagneticButton({
     <button
       type={type ?? "button"}
       onClick={onClick}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className={cn(base, styles, "overflow-hidden", className)}
+      disabled={disabled}
+      onMouseMove={disabled ? undefined : onMove}
+      onMouseLeave={disabled ? undefined : onLeave}
+      className={cn(base, styles, "overflow-hidden", disabled && "opacity-60 cursor-not-allowed pointer-events-none", className)}
     >
       {bg}
       {inner}

@@ -39,13 +39,13 @@ export function MobileAppShowcase() {
   return (
     <section className="py-24 bg-white border-t border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-blue-50/70 via-indigo-50/50 to-slate-50/80 rounded-3xl p-8 sm:p-14 border border-blue-100 shadow-sm">
+        <div className="bg-slate-50 rounded-2xl p-8 sm:p-12 border border-slate-200 shadow-xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             {/* Left Column: App Features & Links */}
             <div className="lg:col-span-7 space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700">
-                <Smartphone className="w-3.5 h-3.5" /> Mobile App Experience
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                <Smartphone className="w-3.5 h-3.5" /> Mobile app experience
               </span>
 
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -92,8 +92,8 @@ export function MobileAppShowcase() {
 
               {/* SMS App Link Form */}
               <div className="pt-2">
-                <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  Get App Download Link via SMS
+                <p className="text-xs font-medium text-slate-700 mb-2">
+                  Get app download link via SMS
                 </p>
                 <form onSubmit={handleSendLink} className="flex flex-col sm:flex-row gap-2 max-w-md">
                   <div className="relative flex-1 bg-white rounded-xl flex items-center pl-3 border border-slate-200">
@@ -122,43 +122,43 @@ export function MobileAppShowcase() {
 
             {/* Right Column: Phone Mockup Visual */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="w-72 bg-slate-900 rounded-[40px] p-3.5 shadow-2xl border-4 border-slate-800 relative">
+              <div className="w-72 bg-slate-900 rounded-[32px] p-3 shadow-lg border border-slate-800 relative">
                 {/* Speaker pill */}
-                <div className="w-24 h-4 bg-slate-800 rounded-full mx-auto mb-3" />
+                <div className="w-20 h-3 bg-slate-800 rounded-full mx-auto mb-3" />
 
                 {/* Inside Screen */}
-                <div className="bg-white rounded-[32px] p-5 space-y-4 text-slate-900 text-left">
+                <div className="bg-white rounded-[24px] p-5 space-y-4 text-slate-900 text-left">
                   <div className="flex justify-between items-center pb-2 border-b border-slate-100">
-                    <span className="text-xs font-extrabold text-blue-600">AapkaCredit</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    <span className="text-xs font-bold text-blue-600">AapkaCredit</span>
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                       Approved
                     </span>
                   </div>
 
-                  <div className="text-center py-2 bg-slate-50 rounded-2xl border border-slate-100">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 block">Sanction Available</span>
-                    <span className="text-2xl font-black text-slate-900">₹3,50,000</span>
-                    <span className="text-[10px] text-emerald-600 font-bold block mt-0.5">Ready for instant transfer</span>
+                  <div className="text-center py-2 bg-slate-50 rounded-xl border border-slate-100">
+                    <span className="text-[10px] font-medium text-slate-500 block">Sanction available</span>
+                    <span className="text-2xl font-mono font-bold text-slate-900 tabular-nums">₹3,50,000</span>
+                    <span className="text-[10px] text-emerald-700 font-medium block mt-0.5">Ready for instant transfer</span>
                   </div>
 
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between text-slate-600">
                       <span>Monthly EMI</span>
-                      <span className="font-bold text-slate-900">₹11,400</span>
+                      <span className="font-mono font-medium text-slate-900 tabular-nums">₹11,400</span>
                     </div>
                     <div className="flex justify-between text-slate-600">
                       <span>Tenure</span>
-                      <span className="font-bold text-slate-900">36 Months</span>
+                      <span className="font-mono font-medium text-slate-900 tabular-nums">36 Months</span>
                     </div>
                     <div className="flex justify-between text-slate-600">
                       <span>Verified Bank</span>
-                      <span className="font-bold text-slate-900">HDFC •••• 4821</span>
+                      <span className="font-medium text-slate-900">HDFC •••• 4821</span>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    className="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1"
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow-xs flex items-center justify-center gap-1 transition"
                   >
                     <span>Disburse Now via IMPS</span>
                     <ArrowRight className="w-3.5 h-3.5" />

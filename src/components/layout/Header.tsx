@@ -93,7 +93,7 @@ export function Header({
                 <span className="sr-only">View notifications</span>
                 <Bell className="h-5 w-5" aria-hidden="true" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-background animate-pulse">
+                  <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[10px] font-mono font-medium text-white shadow-xs ring-2 ring-background">
                     {unreadCount}
                   </span>
                 )}

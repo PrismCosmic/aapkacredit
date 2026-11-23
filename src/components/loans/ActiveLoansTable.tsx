@@ -275,7 +275,7 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
             placeholder="Search loans by ID, borrower name, mobile..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-card/50 border-border"
+            className="pl-9 bg-background border-border"
           />
         </div>
 
@@ -295,7 +295,7 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
       </div>
 
       {/* Main Active Loans Table */}
-      <div className="rounded-xl border border-border bg-card/50 backdrop-blur overflow-hidden">
+      <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-border">
@@ -325,17 +325,17 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
                   <p className="text-xs text-muted-foreground">{loan.mobile}</p>
                 </TableCell>
                 <TableCell>
-                  <p className="font-bold text-foreground">₹{loan.amount.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">Bal: ₹{loan.balance.toLocaleString()}</p>
+                  <p className="font-mono font-bold text-foreground tabular-nums">₹{loan.amount.toLocaleString()}</p>
+                  <p className="font-mono text-xs text-muted-foreground tabular-nums">Bal: ₹{loan.balance.toLocaleString()}</p>
                 </TableCell>
-                <TableCell className="text-xs font-medium">
-                  {loan.rate}% <span className="text-muted-foreground">({loan.tenure} mo)</span>
+                <TableCell className="font-mono text-xs font-medium tabular-nums">
+                  {loan.rate}% <span className="font-sans text-muted-foreground">({loan.tenure} mo)</span>
                 </TableCell>
-                <TableCell className="font-bold text-primary">
+                <TableCell className="font-mono font-bold text-primary tabular-nums">
                   ₹{loan.emi.toLocaleString()}
                 </TableCell>
                 <TableCell className="text-xs">
-                  <span className="font-medium text-foreground">{loan.nextDueDate}</span>
+                  <span className="font-mono font-medium text-foreground tabular-nums">{loan.nextDueDate}</span>
                 </TableCell>
                 <TableCell>
                   <Badge
@@ -464,7 +464,7 @@ export function ActiveLoansTable({ initialLoans = [] }: { initialLoans?: any[] }
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {generateSchedule(scheduleLoan).map((row) => (
+                  {generateSchedule(scheduleLoan).map((row: any) => (
                     <TableRow key={row.installment} className="text-xs hover:bg-muted/30">
                       <TableCell className="font-mono">{row.installment}</TableCell>
                       <TableCell className="font-semibold">₹{row.emi.toLocaleString()}</TableCell>
