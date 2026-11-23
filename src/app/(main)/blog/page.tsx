@@ -53,12 +53,12 @@ export default function BlogIndexPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group h-full">
-              <article className="glass rounded-3xl p-6 h-full flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant border border-border">
-                <div className="flex items-center gap-3 text-xs font-medium text-primary mb-4">
-                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full">
+              <article className="bg-white rounded-2xl p-6 h-full flex flex-col border border-slate-200 shadow-xs hover:border-blue-300 transition-colors">
+                <div className="flex items-center gap-3 text-xs font-medium text-blue-600 mb-4">
+                  <span className="bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-0.5 rounded-md">
                     {post.category}
                   </span>
-                  <span className="flex items-center gap-1 text-muted-foreground">
+                  <span className="flex items-center gap-1 text-slate-500 font-mono tabular-nums">
                     <BookOpen className="h-3.5 w-3.5" />
                     {post.readTime}
                   </span>

@@ -101,40 +101,39 @@ export default function AboutPage() {
               {[
                 { icon: Calendar, label: "Founded", value: "2023" },
                 { icon: MapPin, label: "Registered", value: "India" },
-                { icon: Award, label: "Type", value: "Direct Lender" },
+                { icon: Award, label: "Type", value: "Direct Lending Tech" },
               ].map((item) => (
-                <div key={item.label} className="glass rounded-2xl p-4 border border-border text-center">
-                  <item.icon className="h-5 w-5 text-primary mx-auto mb-2" />
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">{item.label}</p>
-                  <p className="text-sm font-semibold text-foreground mt-1">{item.value}</p>
+                <div key={item.label} className="bg-slate-50 rounded-xl p-4 border border-slate-200 text-center">
+                  <item.icon className="h-5 w-5 text-blue-600 mx-auto mb-2" />
+                  <p className="text-xs text-slate-500 font-medium">{item.label}</p>
+                  <p className="text-sm font-semibold text-slate-900 mt-1">{item.value}</p>
                 </div>
               ))}
             </div>
           </div>
-          <div className="relative aspect-square md:aspect-video lg:aspect-square rounded-3xl overflow-hidden glass p-8 border border-border">
-             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-electric/10 mix-blend-overlay" />
-             <div className="h-full w-full rounded-2xl bg-foreground/5 flex flex-col items-center justify-center text-center p-8 border border-white/10">
-                <span className="text-5xl font-display font-bold text-foreground mb-4">10L+</span>
-                <p className="text-muted-foreground">Applications Processed</p>
-                <div className="h-px w-16 bg-border my-6" />
-                <span className="text-5xl font-display font-bold text-foreground mb-4">50+</span>
-                <p className="text-muted-foreground">Lending Partners</p>
+          <div className="relative aspect-square md:aspect-video lg:aspect-square rounded-2xl overflow-hidden bg-slate-900 p-8 border border-slate-800 text-white">
+             <div className="h-full w-full rounded-xl bg-slate-800/40 flex flex-col items-center justify-center text-center p-8 border border-slate-700/50">
+                <span className="text-5xl font-mono tabular-nums font-bold text-white mb-2">10L+</span>
+                <p className="text-slate-400 text-sm">Applications Processed</p>
+                <div className="h-px w-16 bg-slate-700 my-6" />
+                <span className="text-5xl font-mono tabular-nums font-bold text-white mb-2">50+</span>
+                <p className="text-slate-400 text-sm">Regulated Lending Partners</p>
              </div>
           </div>
         </div>
 
-        <div className="mt-32">
-          <h2 className="text-3xl font-display font-bold text-foreground text-center mb-16">
+        <div className="mt-28">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 text-center mb-12">
             Our Core Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, idx) => (
-              <div key={idx} className="glass rounded-3xl p-8 border border-border">
-                <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6">
-                  <value.icon className="h-6 w-6" />
+              <div key={idx} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
+                <div className="h-10 w-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-5">
+                  <value.icon className="h-5 w-5" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">{value.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{value.description}</p>
+                <h3 className="text-base font-semibold text-slate-900 mb-2">{value.title}</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">{value.description}</p>
               </div>
             ))}
           </div>

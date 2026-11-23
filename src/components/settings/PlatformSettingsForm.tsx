@@ -253,7 +253,7 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
       {/* ── Section 1: Marketing Display vs Internal Real Caps ─────────── */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Marketing / Customer Facing */}
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <Eye className="h-5 w-5 text-teal-400" />
@@ -321,7 +321,7 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
         </Card>
 
         {/* Bureau Score Assessment Fee & Verification Gating */}
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <ShieldCheck className="h-5 w-5 text-emerald-400" />
@@ -409,7 +409,7 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
       </div>
 
       {/* ── Section 2: Credit Score Tiers Matrix ──────────────────────── */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-white border-slate-200 shadow-xs">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -659,7 +659,7 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
       </Card>
 
       {/* ── Section 2.5: Live Underwriting Policy Simulator ─────────── */}
-      <Card className="bg-card/50 backdrop-blur border-primary/40 shadow-sm">
+      <Card className="bg-white border-blue-200 shadow-xs">
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -781,7 +781,7 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
       {/* ── Section 3: Integrations & Master Kill Switches ───────────── */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Integration Rails */}
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Zap className="h-5 w-5 text-success" />
@@ -828,7 +828,7 @@ export function PlatformSettingsForm({ initialSettings }: { initialSettings: any
         </Card>
 
         {/* Emergency Master Controls */}
-        <Card className="bg-card/50 backdrop-blur border-destructive/30">
+        <Card className="bg-white border-red-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
               <AlertTriangle className="h-5 w-5 text-destructive" />

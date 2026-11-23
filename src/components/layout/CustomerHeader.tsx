@@ -28,7 +28,7 @@ export function CustomerHeader({ user, notifications = [] }: CustomerHeaderProps
   };
 
   return (
-    <header className="h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-20 px-4 md:px-6 flex items-center justify-between gap-4">
+    <header className="h-16 border-b border-slate-200 bg-white sticky top-0 z-20 px-4 md:px-6 flex items-center justify-between gap-4">
       <form onSubmit={handleSearch} className="flex items-center gap-3 flex-1 max-w-md">
         <div className="relative w-full">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -106,7 +106,7 @@ export function CustomerHeader({ user, notifications = [] }: CustomerHeaderProps
             <p className="text-sm font-semibold leading-none">{displayName}</p>
             <p className="text-xs text-muted-foreground mt-1">{displaySub}</p>
           </div>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-emerald-500 flex items-center justify-center text-white font-semibold shadow-sm">
+          <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold shadow-xs">
             <User className="w-4 h-4" />
           </div>
         </Link>

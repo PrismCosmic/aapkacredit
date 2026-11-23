@@ -4,7 +4,7 @@ import { blogPosts } from "@/lib/blog";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import Link from "next/link";
-import { Linkedin, Twitter, BookOpen, Award, CheckCircle2 } from "lucide-react";
+import { Linkedin, Twitter, BookOpen, Award, CheckCircle2, Briefcase, GraduationCap } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Our Authors – Finance Experts at Aapka Credit",
@@ -88,12 +88,16 @@ export default function AuthorsPage() {
             return (
               <div
                 key={author.id}
-                className="glass-strong rounded-3xl border border-foreground/10 p-8 sm:p-10"
+                className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs"
               >
-                <div className="flex flex-col sm:flex-row gap-8 items-start">
+                <div className="flex flex-col sm:flex-row gap-6 items-start">
                   {/* Avatar placeholder */}
-                  <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-primary/30 to-electric/20 flex items-center justify-center shrink-0 text-3xl border border-primary/20">
-                    {author.name === "Aapka Credit Finance Team" ? "💼" : "🔬"}
+                  <div className="h-16 w-16 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100 text-blue-600">
+                    {author.name === "Aapka Credit Finance Team" ? (
+                      <Briefcase className="w-8 h-8" />
+                    ) : (
+                      <GraduationCap className="w-8 h-8" />
+                    )}
                   </div>
 
                   <div className="flex-grow">
@@ -135,12 +139,12 @@ export default function AuthorsPage() {
 
                     {/* Expertise tags */}
                     <div className="mb-6">
-                      <p className="text-xs uppercase tracking-wider text-foreground/40 mb-3">Areas of Expertise</p>
+                      <p className="text-xs font-medium text-slate-500 mb-3">Areas of Expertise</p>
                       <div className="flex flex-wrap gap-2">
                         {author.expertise.map((skill) => (
                           <span
                             key={skill}
-                            className="rounded-full bg-foreground/5 border border-foreground/10 px-3 py-1 text-xs text-foreground/70"
+                            className="rounded-lg bg-slate-50 border border-slate-200 px-3 py-1 text-xs text-slate-700"
                           >
                             {skill}
                           </span>
@@ -149,11 +153,12 @@ export default function AuthorsPage() {
                     </div>
 
                     {/* Article count */}
-                    <div className="flex items-center gap-2 text-sm text-foreground/50">
+                    <div className="flex items-center gap-2 text-xs text-slate-500">
                       <BookOpen className="h-4 w-4" aria-hidden="true" />
-                      <span>{author.articleCount} articles published</span>
+                      <span className="font-mono tabular-nums">{author.articleCount}</span>
+                      <span>articles published</span>
                       <span className="mx-1">·</span>
-                      <Link href="/blog" className="text-primary hover:underline">
+                      <Link href="/blog" className="text-blue-600 hover:underline">
                         View all articles →
                       </Link>
                     </div>
@@ -165,14 +170,14 @@ export default function AuthorsPage() {
         </div>
 
         {/* Editorial policy */}
-        <div className="mt-16 glass rounded-3xl border border-foreground/10 p-8 text-center">
-          <h2 className="font-display text-xl font-bold text-foreground mb-3">Our Editorial Policy</h2>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+        <div className="mt-16 bg-white rounded-2xl border border-slate-200 p-8 text-center shadow-xs">
+          <h2 className="text-xl font-semibold text-slate-900 mb-3">Our Editorial Policy</h2>
+          <p className="text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
             All content published on Aapka Credit is original, independently researched, and reviewed for
             accuracy against current RBI regulations, SEBI guidelines, and IRDAI notifications before
             going live. We do not accept sponsored articles or allow advertisers to influence editorial
             content. If you spot an error, please email{" "}
-            <a href="mailto:support@aapkacredit.com" className="text-primary hover:underline">
+            <a href="mailto:support@aapkacredit.com" className="text-blue-600 hover:underline">
               support@aapkacredit.com
             </a>
             .

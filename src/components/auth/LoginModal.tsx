@@ -94,40 +94,30 @@ export function LoginModal({ isOpen, onOpenChange, redirectTo = "/dashboard" }: 
       <DialogContent className="p-0 overflow-hidden border-0 bg-transparent shadow-2xl sm:max-w-3xl md:h-[500px]">
         <div className="flex h-full w-full flex-col md:flex-row rounded-3xl overflow-hidden bg-background">
           
-          {/* Left Panel - Premium Brand Graphic */}
-          <div className="hidden md:flex md:w-[45%] flex-col justify-between relative bg-gradient-to-br from-blue-700 via-blue-800 to-emerald-900 p-8 text-white overflow-hidden">
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
-            
-            {/* Animated background blobs */}
-            <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob" />
-            <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000" />
-            
-            <div className="relative z-10 flex items-center gap-2">
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md border border-white/20 shadow-sm">
-                <Sparkles className="h-5 w-5 text-white" />
+          {/* Left Panel - Institutional Brand Graphic */}
+          <div className="hidden md:flex md:w-[45%] flex-col justify-between relative bg-slate-900 p-8 text-white border-r border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400">
+                <ShieldCheck className="h-5 w-5" />
               </div>
-              <span className="font-display font-semibold tracking-tight text-lg">Aapka Credit</span>
+              <span className="font-semibold tracking-tight text-base text-white">Aapka Credit</span>
             </div>
 
-            <div className="relative z-10 space-y-4">
-              <h3 className="text-3xl font-bold font-display leading-tight tracking-tight">
-                Unlock instant financial freedom.
+            <div className="space-y-3">
+              <span className="inline-block px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 text-xs font-medium border border-slate-700">
+                RBI Compliant Digital Lending
+              </span>
+              <h3 className="text-xl font-semibold leading-snug tracking-tight text-white">
+                Institutional Borrowing & Repayment Portal
               </h3>
-              <p className="text-blue-100/80 text-sm leading-relaxed">
-                Join thousands of verified users who get lightning-fast loan approvals with zero paperwork.
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Direct access to your sanctioned loan accounts, KFS disclosures, and real-time repayment ledger.
               </p>
-              
-              <div className="flex items-center gap-3 pt-4">
-                <div className="flex -space-x-3">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-8 w-8 rounded-full border-2 border-blue-800 bg-white/10 backdrop-blur-sm" />
-                  ))}
-                </div>
-                <div className="text-xs">
-                  <p className="font-medium text-white">Trust Score: Excellent</p>
-                  <p className="text-white/60">Based on Money Lending License guidelines</p>
-                </div>
-              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+              <span>DigiLocker & CIBIL Enabled</span>
+              <span className="text-emerald-400 font-mono">256-Bit TLS</span>
             </div>
           </div>
 
@@ -173,7 +163,7 @@ export function LoginModal({ isOpen, onOpenChange, redirectTo = "/dashboard" }: 
                   <button
                     type="submit"
                     disabled={isLoading || phone.length < 10}
-                    className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-500 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                    className="group flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-3 text-sm font-medium text-white shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -243,7 +233,7 @@ export function LoginModal({ isOpen, onOpenChange, redirectTo = "/dashboard" }: 
                     <button
                       type="submit"
                       disabled={isLoading || otp.length < 6}
-                      className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-500 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                      className="group flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-3 text-sm font-medium text-white shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isLoading ? (
                         <Loader2 className="h-5 w-5 animate-spin" />

@@ -133,13 +133,13 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        <div className="mt-16 p-8 rounded-3xl bg-gradient-to-br from-primary/10 to-electric/10 border border-primary/20 text-center">
-          <h3 className="text-2xl font-display font-bold text-foreground mb-4">Ready to take control of your finances?</h3>
-          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-            Check your exact eligibility across multiple lenders instantly. No impact on your credit score.
+        <div className="mt-16 p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+          <h3 className="text-xl font-semibold text-slate-900 mb-2">Ready to explore borrowing options?</h3>
+          <p className="text-sm text-slate-600 mb-6 max-w-lg mx-auto">
+            Check your exact eligibility across multiple RBI-regulated lenders instantly. Zero impact on your CIBIL score.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <MagneticButton href="/calculator" variant="ghost" className="bg-background">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <MagneticButton href="/calculator" variant="ghost" className="bg-white border border-slate-200 text-slate-700">
               Calculate EMI
             </MagneticButton>
             <MagneticButton href="/" variant="primary">
@@ -151,8 +151,8 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Internal Linking / Related Articles for SEO */}
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 mt-24">
-        <h2 className="text-3xl font-display font-bold text-foreground mb-8 text-center">Related Articles</h2>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <h2 className="text-2xl font-semibold text-slate-900 mb-8 text-center">Related Articles</h2>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blogPosts
             .filter((p) => p.slug !== post.slug && p.category === post.category)
             .slice(0, 3)
@@ -160,9 +160,9 @@ export default async function BlogPostPage({ params }: Props) {
               <Link 
                 key={related.slug} 
                 href={`/blog/${related.slug}`}
-                className="group flex flex-col glass rounded-3xl p-6 hover:border-primary/50 transition-all duration-300"
+                className="group flex flex-col bg-white rounded-2xl border border-slate-200 p-6 hover:border-blue-300 transition-colors shadow-xs"
               >
-                <span className="text-primary text-xs font-bold tracking-wider uppercase mb-3">
+                <span className="text-xs font-medium text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md self-start border border-blue-100 mb-3">
                   {related.category}
                 </span>
                 <h3 className="text-xl font-display font-bold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">

@@ -268,7 +268,7 @@ export function HomepageSeoContent() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="group flex flex-col items-center justify-center gap-2 rounded-2xl glass border border-foreground/10 p-5 text-center transition hover:-translate-y-0.5 hover:shadow-elegant"
+                className="group flex flex-col items-center justify-center gap-2 rounded-xl bg-slate-50 border border-slate-200 p-4 text-center hover:border-blue-300 hover:bg-white transition-colors shadow-xs"
               >
                 <item.icon className="h-5 w-5 text-primary" aria-hidden="true" />
                 <span className="text-sm font-medium text-foreground/80 group-hover:text-foreground transition">

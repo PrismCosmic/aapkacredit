@@ -107,7 +107,7 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-100 text-blue-700 mb-2">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 mb-2">
           <ShieldCheck className="w-3.5 h-3.5" /> Razorpay Standard Checkout
         </div>
         <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
@@ -156,7 +156,7 @@ export default function CheckoutPage() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1.5">
+                  <label className="block text-xs font-medium text-slate-500 mb-1.5">
                     Loan Account
                   </label>
                   <select
@@ -215,7 +215,7 @@ export default function CheckoutPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-1.5">
+              <label className="block text-xs font-medium text-slate-500 mb-1.5">
                 Payable Amount (₹)
               </label>
               <input

@@ -123,7 +123,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
     <div className="space-y-6">
       {/* Metric Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Active Grievances</CardTitle>
             <AlertCircle className="h-4 w-4 text-amber-400" />
@@ -134,7 +134,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Under Investigation</CardTitle>
             <Clock className="h-4 w-4 text-primary" />
@@ -145,7 +145,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Resolved Tickets</CardTitle>
             <CheckCircle2 className="h-4 w-4 text-emerald-400" />
@@ -160,7 +160,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
       {/* Main Two-Pane Split View */}
       <div className="grid gap-6 lg:grid-cols-12 min-h-[580px]">
         {/* Left Pane: Ticket List */}
-        <Card className="lg:col-span-5 bg-card/50 backdrop-blur border-border flex flex-col">
+        <Card className="lg:col-span-5 bg-white border-slate-200 shadow-xs flex flex-col">
           <CardHeader className="p-4 border-b border-border space-y-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-semibold flex items-center gap-2">
@@ -239,7 +239,7 @@ export function SupportTicketsManager({ initialTickets, meta }: { initialTickets
         </Card>
 
         {/* Right Pane: Selected Ticket Detail & Chat Thread */}
-        <Card className="lg:col-span-7 bg-card/50 backdrop-blur border-border flex flex-col justify-between">
+        <Card className="lg:col-span-7 bg-white border-slate-200 shadow-xs flex flex-col justify-between">
           {selectedTicket ? (
             <>
               <div>

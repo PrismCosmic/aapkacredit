@@ -65,7 +65,7 @@ export function CustomerSidebar() {
         </nav>
 
         <div className="mt-8 space-y-1">
-          <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+          <h3 className="px-3 text-xs font-medium text-slate-500 mb-2">
             Settings
           </h3>
           <Link

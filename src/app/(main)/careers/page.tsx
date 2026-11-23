@@ -49,7 +49,7 @@ function FloatInput({
       />
       <label
         htmlFor={id}
-        className="pointer-events-none absolute left-4 top-2 text-[11px] uppercase tracking-wider text-foreground/50 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-focus:top-2 peer-focus:text-[11px] peer-focus:uppercase peer-focus:tracking-wider"
+        className="pointer-events-none absolute left-4 top-2 text-[11px] font-medium text-slate-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-blue-600 peer-focus:font-medium"
       >
         {label}
       </label>

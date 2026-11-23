@@ -158,7 +158,7 @@ export default function ApplicationStatusPage() {
       if (!res.ok || json?.success === false) {
         toast.error(json?.message || "Disbursement failed. Please retry or contact support.");
       } else {
-        toast.success("🎉 Payout processed! Loan amount disbursed to your bank account.");
+        toast.success("Payout processed successfully! Loan amount disbursed to your bank account.");
         await loadStatus();
       }
     } catch {
@@ -315,11 +315,11 @@ export default function ApplicationStatusPage() {
           <div className="pt-6 border-t border-border">
             {/* STAGE 1: Offer Ready & KFS Acceptance */}
             {(upperStatus === "OFFER_GENERATED" || upperStatus === "OFFER_ACCEPTED") && (
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/20 space-y-6">
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider mb-2">
-                      <Sparkles className="w-3 h-3" /> Pre-Approved Offer
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 border border-blue-100 text-blue-700 text-xs font-medium mb-2">
+                      <Sparkles className="w-3.5 h-3.5" /> Pre-Approved Offer
                     </span>
                     <h3 className="text-xl font-bold">RBI Key Fact Statement (KFS)</h3>
                     <p className="text-xs text-muted-foreground mt-1">
@@ -328,7 +328,7 @@ export default function ApplicationStatusPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-muted-foreground">Sanctioned Amount</p>
-                    <p className="text-2xl font-black text-blue-600">₹{sanctioned.toLocaleString("en-IN")}</p>
+                    <p className="text-2xl font-bold font-mono tabular-nums text-blue-600">₹{sanctioned.toLocaleString("en-IN")}</p>
                   </div>
                 </div>
 
@@ -388,7 +388,7 @@ export default function ApplicationStatusPage() {
                     await handleAction("accept", "Loan offer accepted!");
                     await handleAction("kfs/accept", "Key Fact Statement accepted!");
                   }}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25 disabled:opacity-50"
+                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm flex items-center justify-center gap-2 transition-colors shadow-xs disabled:opacity-50"
                 >
                   {actionBusy ? (
                     <>
@@ -405,18 +405,18 @@ export default function ApplicationStatusPage() {
 
             {/* STAGE 2: Digital e-Sign Agreement */}
             {upperStatus === "KFS_ACCEPTED" && (
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 space-y-5">
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-xl font-bold flex items-center gap-2">
-                      <FileSignature className="w-5 h-5 text-indigo-600" />
+                      <FileSignature className="w-5 h-5 text-blue-600" />
                       Digital Loan Agreement e-Sign
                     </h3>
                     <p className="text-xs text-muted-foreground mt-1">
                       RBI Information Technology Act (IT Act 2000) compliant Aadhaar e-Sign execution.
                     </p>
                   </div>
-                  <span className="text-xs font-mono px-2 py-1 bg-indigo-500/10 text-indigo-600 rounded-md font-semibold">
+                  <span className="text-xs font-mono px-2 py-1 bg-slate-100 text-slate-700 rounded-md font-semibold">
                     AGR-{loan.id.slice(0, 8).toUpperCase()}
                   </span>
                 </div>
@@ -432,7 +432,7 @@ export default function ApplicationStatusPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Sanctioned Facility:</span>
-                    <span className="font-semibold">₹{sanctioned.toLocaleString("en-IN")} Personal Loan</span>
+                    <span className="font-semibold font-mono tabular-nums">₹{sanctioned.toLocaleString("en-IN")} Personal Loan</span>
                   </div>
                 </div>
 
@@ -451,7 +451,7 @@ export default function ApplicationStatusPage() {
                       type="button"
                       disabled={actionBusy || esignOtp.length < 6}
                       onClick={() => handleAction("esign", "Digital e-Sign executed successfully!")}
-                      className="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm disabled:opacity-50 flex items-center gap-2 shadow-md shadow-indigo-500/20"
+                      className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm disabled:opacity-50 flex items-center gap-2 shadow-xs"
                     >
                       {actionBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                       e-Sign Agreement
@@ -500,40 +500,40 @@ export default function ApplicationStatusPage() {
 
             {/* STAGE 4: Ready for Instant Disbursement (Previously Missing on Web!) */}
             {(upperStatus === "FEE_PAID" || upperStatus === "APPROVED_PENDING_DISBURSEMENT") && (
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-emerald-500/15 to-teal-500/15 border-2 border-emerald-500/30 space-y-5 animate-in zoom-in-95 duration-300">
+              <div className="p-6 rounded-2xl bg-white border border-emerald-200 shadow-xs space-y-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider mb-2 shadow-sm">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 text-xs font-medium border border-emerald-200 mb-2">
                       <Zap className="w-3.5 h-3.5" /> All Checks Passed
                     </span>
-                    <h3 className="text-2xl font-black text-foreground">Ready for Instant Bank Transfer!</h3>
+                    <h3 className="text-xl font-bold text-foreground">Ready for Instant Bank Transfer</h3>
                     <p className="text-xs text-muted-foreground mt-1">
                       Your loan agreement is fully executed. Tap below to trigger instant IMPS transfer to your verified bank account.
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-muted-foreground">Net Payout</p>
-                    <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                    <p className="text-2xl font-bold font-mono tabular-nums text-emerald-600 dark:text-emerald-400">
                       ₹{netDisbursed.toLocaleString("en-IN")}
                     </p>
                   </div>
                 </div>
 
                 {/* Account Details Box */}
-                <div className="p-4 rounded-xl bg-card border border-border grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <div>
                     <span className="text-muted-foreground">Beneficiary Bank</span>
-                    <p className="font-bold mt-0.5">{loan.bank_name || user?.bank_name || "HDFC Bank"}</p>
+                    <p className="font-semibold mt-0.5">{loan.bank_name || user?.bank_name || "HDFC Bank"}</p>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Account Number</span>
-                    <p className="font-bold font-mono mt-0.5">
+                    <p className="font-semibold font-mono mt-0.5">
                       ••{String(loan.bank_account_number_masked || user?.bank_account || "9876").slice(-4)}
                     </p>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Transfer Mode</span>
-                    <p className="font-bold text-blue-600 mt-0.5">24x7 IMPS Instant Payout</p>
+                    <p className="font-semibold text-blue-600 mt-0.5">24x7 IMPS Instant Payout</p>
                   </div>
                 </div>
 
@@ -541,16 +541,16 @@ export default function ApplicationStatusPage() {
                   type="button"
                   disabled={actionBusy}
                   onClick={handleDisburse}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-base flex items-center justify-center gap-2 transition-all shadow-xl shadow-emerald-500/30 disabled:opacity-50"
+                  className="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-sm flex items-center justify-center gap-2 transition-colors shadow-xs disabled:opacity-50"
                 >
                   {actionBusy ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                       Initiating IMPS Transfer...
                     </>
                   ) : (
                     <>
-                      <Zap className="w-5 h-5" />
+                      <Zap className="w-4 h-4" />
                       Disburse ₹{netDisbursed.toLocaleString("en-IN")} to My Bank Account Now
                     </>
                   )}

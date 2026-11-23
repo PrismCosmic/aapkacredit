@@ -65,50 +65,50 @@ export function AnalyticsDashboardView({ initialData }: { initialData?: any }) {
     <div className="space-y-6">
       {/* KPI Highlight Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Active Loan Book (AUM)</CardTitle>
             <IndianRupee className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{data.kpis?.aum || "₹5.80 Cr"}</div>
+            <div className="text-2xl font-bold font-mono tabular-nums text-foreground">{data.kpis?.aum || "₹5.80 Cr"}</div>
             <p className="text-xs text-success mt-1 flex items-center gap-1">
               <TrendingUp className="h-3.5 w-3.5" /> +22.4% vs last quarter
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Average Ticket Size</CardTitle>
             <Activity className="h-4 w-4 text-teal-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{data.kpis?.avg_ticket || "₹94,500"}</div>
+            <div className="text-2xl font-bold font-mono tabular-nums text-foreground">{data.kpis?.avg_ticket || "₹94,500"}</div>
             <p className="text-xs text-muted-foreground mt-1">Prime & near-prime borrowers</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Portfolio Yield (Weighted APR)</CardTitle>
             <Percent className="h-4 w-4 text-amber-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">{data.kpis?.portfolio_yield || "14.2%"}</div>
+            <div className="text-2xl font-bold font-mono tabular-nums text-foreground">{data.kpis?.portfolio_yield || "14.2%"}</div>
             <p className="text-xs text-success mt-1 flex items-center gap-1">
               <CheckCircle2 className="h-3.5 w-3.5" /> Net Interest Margin: 8.9%
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Gross NPA Ratio (90+ DPD)</CardTitle>
             <ShieldAlert className="h-4 w-4 text-success" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">{data.kpis?.gnpa || "0.4%"}</div>
+            <div className="text-2xl font-bold font-mono tabular-nums text-success">{data.kpis?.gnpa || "0.4%"}</div>
             <p className="text-xs text-success mt-1">Industry benchmark: &lt; 2.5%</p>
           </CardContent>
         </Card>
@@ -117,7 +117,7 @@ export function AnalyticsDashboardView({ initialData }: { initialData?: any }) {
       {/* Main Charts Grid */}
       <div className="grid gap-6 md:grid-cols-7">
         {/* Disbursements vs Collections Area Chart */}
-        <Card className="col-span-4 bg-card/50 backdrop-blur border-border">
+        <Card className="col-span-4 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-primary" /> Monthly Cashflows & Disbursements
@@ -178,7 +178,7 @@ export function AnalyticsDashboardView({ initialData }: { initialData?: any }) {
         </Card>
 
         {/* Portfolio Product Mix */}
-        <Card className="col-span-3 bg-card/50 backdrop-blur border-border">
+        <Card className="col-span-3 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <PieIcon className="h-5 w-5 text-primary" /> Loan Portfolio Mix
@@ -218,7 +218,7 @@ export function AnalyticsDashboardView({ initialData }: { initialData?: any }) {
         </Card>
 
         {/* Delinquency DPD Aging Bar Chart */}
-        <Card className="col-span-7 bg-card/50 backdrop-blur border-border">
+        <Card className="col-span-7 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-amber-500" /> Delinquency Aging Buckets (Days Past Due)

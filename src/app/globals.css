@@ -250,37 +250,3 @@
   scrollbar-width: none;
 }
 
-/* ─── Gradient utilities (replaces inline style={{}} in components) ─────────
- * These CSS classes replace repetitive inline `style={{background: ...}}` 
- * attributes across Hero, Stats, Contact, HowItWorks, LoanProducts etc.
- * This reduces HTML payload size and improves maintainability.
- * ─────────────────────────────────────────────────────────────────────────── */
-
-@utility bg-radial-blue {
-  background: radial-gradient(closest-side, rgba(59, 130, 246, 0.5), transparent 70%);
-}
-
-@utility bg-radial-hero {
-  background: radial-gradient(closest-side, rgba(59, 130, 246, 0.45), transparent);
-}
-
-@utility bg-gradient-stats {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), transparent 50%, rgba(16, 185, 129, 0.15));
-}
-
-@utility bg-gradient-contact {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), transparent 50%, rgba(16, 185, 129, 0.18));
-}
-
-@utility bg-gradient-card {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(16, 185, 129, 0.25) 50%, rgba(255, 255, 255, 0.05));
-}
-
-@utility bg-gradient-how {
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), rgba(16, 185, 129, 0.5), transparent);
-}
-
-@utility bg-glow-blue {
-  background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
-}
-

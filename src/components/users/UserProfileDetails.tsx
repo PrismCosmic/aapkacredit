@@ -246,7 +246,7 @@ export function UserProfileDetails({ userId, initialData }: { userId: string; in
 
       {/* Credit Score & Contact Info Grid */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="md:col-span-1 bg-card/50 backdrop-blur border-border">
+        <Card className="md:col-span-1 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="text-sm">Bureau Credit Score</CardTitle>
           </CardHeader>
@@ -264,7 +264,7 @@ export function UserProfileDetails({ userId, initialData }: { userId: string; in
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-3 bg-card/50 backdrop-blur border-border">
+        <Card className="md:col-span-3 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle className="text-sm">Contact & KYC Details</CardTitle>
           </CardHeader>
@@ -298,7 +298,7 @@ export function UserProfileDetails({ userId, initialData }: { userId: string; in
         </TabsList>
 
         <TabsContent value="financial" className="mt-4 space-y-4">
-          <Card className="bg-card/50 backdrop-blur border-border">
+          <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Building className="h-5 w-5 text-primary" /> Employment & Bank Account
@@ -327,7 +327,7 @@ export function UserProfileDetails({ userId, initialData }: { userId: string; in
         </TabsContent>
 
         <TabsContent value="loans" className="mt-4 space-y-4">
-          <Card className="bg-card/50 backdrop-blur border-border">
+          <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader>
               <CardTitle>Borrowing History</CardTitle>
               <CardDescription>Associated personal and digital credit lines.</CardDescription>
@@ -368,7 +368,7 @@ export function UserProfileDetails({ userId, initialData }: { userId: string; in
         </TabsContent>
 
         <TabsContent value="security" className="mt-4 space-y-4">
-          <Card className="bg-card/50 backdrop-blur border-border">
+          <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader>
               <CardTitle>Hardware Fingerprint & Auditing</CardTitle>
             </CardHeader>

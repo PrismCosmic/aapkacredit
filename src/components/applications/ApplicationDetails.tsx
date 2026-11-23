@@ -862,7 +862,7 @@ export function ApplicationDetails({
       </div>
 
       {/* ── Intelligent Quick Actions Bar ── */}
-      <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl border border-border bg-card/40 backdrop-blur print:hidden">
+      <div className="flex flex-wrap items-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 print:hidden">
         <span className="text-xs font-semibold text-muted-foreground mr-1">Quick Actions:</span>
 
         {/* Send Notification */}
@@ -1142,7 +1142,7 @@ export function ApplicationDetails({
           {/* Top Row: Applicant Profile & Live Selfie Capture */}
           <div className="grid gap-6 md:grid-cols-3">
             {/* Applicant Profile Card */}
-            <Card className="bg-card/50 backdrop-blur border-border md:col-span-2">
+            <Card className="bg-white border-slate-200 shadow-xs md:col-span-2">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -1210,7 +1210,7 @@ export function ApplicationDetails({
             </Card>
 
             {/* Live Captured Image & Liveness Card */}
-            <Card className="bg-card/50 backdrop-blur border-border">
+            <Card className="bg-white border-slate-200 shadow-xs">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -1255,7 +1255,7 @@ export function ApplicationDetails({
                       Selfie image not uploaded
                     </div>
                   )}
-                  <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur rounded p-1.5 text-[10px] text-white space-y-0.5">
+                  <div className="absolute bottom-2 left-2 right-2 bg-slate-900/80 rounded p-1.5 text-[10px] text-white space-y-0.5">
                     <p className="flex items-center gap-1">
                       <MapPin className="w-3 h-3 text-primary shrink-0" /> {liveCapture.geo_coordinates}
                     </p>
@@ -1282,7 +1282,7 @@ export function ApplicationDetails({
           {/* Second Row: Filed Documents (Aadhaar, PAN, Bank Statement) */}
           <div className="grid gap-6 md:grid-cols-3">
             {/* Aadhaar Card */}
-            <Card className="bg-card/50 backdrop-blur border-border">
+            <Card className="bg-white border-slate-200 shadow-xs">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold flex items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -1337,7 +1337,7 @@ export function ApplicationDetails({
             </Card>
 
             {/* PAN Card */}
-            <Card className="bg-card/50 backdrop-blur border-border">
+            <Card className="bg-white border-slate-200 shadow-xs">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold flex items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -1392,7 +1392,7 @@ export function ApplicationDetails({
             </Card>
 
             {/* Income Proof / Bank Statement */}
-            <Card className="bg-card/50 backdrop-blur border-border">
+            <Card className="bg-white border-slate-200 shadow-xs">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-semibold flex items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -1439,7 +1439,7 @@ export function ApplicationDetails({
           </div>
 
           {/* Third Row: Manual Underwriting & Audit Checklist (Auditor Workflow) */}
-          <Card className="bg-card/50 backdrop-blur border-border">
+          <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader className="pb-3 flex flex-row items-center justify-between gap-4">
               <div>
                 <CardTitle className="text-base flex items-center gap-2">
@@ -1587,7 +1587,7 @@ export function ApplicationDetails({
         {/* ── TAB 2: Scoring Engine & Summary ── */}
         <TabsContent value="scoring" className="space-y-6">
           <div className="grid gap-4 md:grid-cols-3">
-            <Card className="bg-card/50 backdrop-blur border-border">
+            <Card className="bg-white border-slate-200 shadow-xs">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Banknote className="h-5 w-5 text-primary" /> Loan Summary
@@ -1626,7 +1626,7 @@ export function ApplicationDetails({
             </Card>
 
             {/* Credit Scoring Engine Card */}
-            <Card className="md:col-span-2 bg-card/50 backdrop-blur border-border">
+            <Card className="md:col-span-2 bg-white border-slate-200 shadow-xs">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span className="flex items-center gap-2">
@@ -1684,7 +1684,7 @@ export function ApplicationDetails({
           </div>
 
           {/* Underwriting Policy Simulator */}
-          <Card className="bg-card/50 backdrop-blur border-border">
+          <Card className="bg-white border-slate-200 shadow-xs">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <Calculator className="h-5 w-5 text-primary" /> Live Underwriting Policy Simulator

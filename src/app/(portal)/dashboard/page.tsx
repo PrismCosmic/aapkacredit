@@ -76,7 +76,7 @@ export default async function CustomerDashboardPage() {
           {nextEmi?.amount ? (
             <Link
               href={checkoutHref}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold shadow-lg shadow-blue-500/20 hover:opacity-95 transition-all flex items-center gap-2 text-sm"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs transition-colors flex items-center gap-2 text-sm"
             >
               Pay EMI ({formatINR(nextEmi.amount)})
               <ArrowUpRight className="w-4 h-4" />
@@ -84,7 +84,7 @@ export default async function CustomerDashboardPage() {
           ) : (
             <Link
               href="/apply"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold shadow-lg shadow-blue-500/20 hover:opacity-95 transition-all flex items-center gap-2 text-sm"
+              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-xs transition-colors flex items-center gap-2 text-sm"
             >
               Apply for New Loan
               <ArrowUpRight className="w-4 h-4" />

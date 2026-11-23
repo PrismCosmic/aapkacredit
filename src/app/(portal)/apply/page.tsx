@@ -383,19 +383,19 @@ export default function ApplyLoanPage() {
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-emerald-500/10 border border-blue-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Estimated Monthly Installment (EMI)</p>
-                  <p className="text-3xl font-black mt-1 text-foreground">
+                  <p className="text-xs font-medium text-slate-500">Estimated Monthly Installment (EMI)</p>
+                  <p className="text-3xl font-bold font-mono tabular-nums mt-1 text-slate-900">
                     ₹{emi.toLocaleString("en-IN")}
-                    <span className="text-sm font-normal text-muted-foreground">/mo</span>
+                    <span className="text-xs font-normal text-slate-500 ml-1">/mo</span>
                   </p>
                 </div>
                 <div className="text-right space-y-1">
-                  <p className="text-xs font-semibold text-emerald-600 flex items-center justify-end gap-1">
+                  <p className="text-xs font-medium text-emerald-700 flex items-center justify-end gap-1">
                     <ShieldCheck className="w-4 h-4" /> Indicative Rate: 13.5% p.a.
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-slate-500">
                     Zero prepayment penalty after 1st EMI payment
                   </p>
                 </div>
@@ -678,7 +678,7 @@ export default function ApplyLoanPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-bold flex items-center gap-2 transition-all shadow-lg shadow-blue-500/25 disabled:opacity-60"
+                  className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-medium flex items-center gap-2 transition-colors shadow-xs disabled:opacity-60"
                 >
                   {isSubmitting ? (
                     <>

@@ -113,7 +113,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
     <div className="space-y-6">
       {/* KPI Metric Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Total Bureau Checks</CardTitle>
             <ShieldCheck className="h-4 w-4 text-primary" />
@@ -124,7 +124,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Fee Revenue Collected</CardTitle>
             <IndianRupee className="h-4 w-4 text-emerald-400" />
@@ -135,7 +135,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Qualified Approvals</CardTitle>
             <CheckCircle2 className="h-4 w-4 text-emerald-400" />
@@ -148,7 +148,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground">Auto-Rejected (Zero Capital Loss)</CardTitle>
             <XCircle className="h-4 w-4 text-destructive" />
@@ -163,7 +163,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
       </div>
 
       {/* Filter and Search Bar */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-white border-slate-200 shadow-xs">
         <CardContent className="p-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="relative w-full md:w-96">
@@ -207,7 +207,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
       </Card>
 
       {/* Main Table */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-white border-slate-200 shadow-xs">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Coins className="h-5 w-5 text-primary" />
@@ -220,7 +220,7 @@ export function CreditAssessmentsTable({ initialData, meta }: { initialData: any
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
-              <thead className="text-[11px] uppercase bg-muted/30 text-muted-foreground border-b border-border">
+              <thead className="text-xs font-medium bg-slate-50 text-slate-600 border-b border-slate-200">
                 <tr>
                   <th className="px-4 py-3">ID & Date</th>
                   <th className="px-4 py-3">Applicant & PAN</th>

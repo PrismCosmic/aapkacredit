@@ -52,7 +52,7 @@ export function Navbar() {
       {/* ── Main Navigation ── */}
       <nav
         className={cn(
-          "w-full transition-colors duration-200 bg-white/95 backdrop-blur-md border-b",
+          "w-full transition-colors duration-200 bg-white border-b",
           scrolled ? "py-2.5 shadow-xs border-slate-200" : "py-3 border-slate-200/80"
         )}
       >

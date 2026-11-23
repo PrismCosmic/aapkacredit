@@ -47,7 +47,7 @@ export function TrendCharts({ initialTrends }: { initialTrends?: any[] }) {
   if (!isMounted) {
     return (
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
-        <Card className="col-span-4 bg-card/50 backdrop-blur border-border shadow-sm">
+        <Card className="col-span-4 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle>Loan Applications Velocity</CardTitle>
             <CardDescription>Application volume vs sanctioned approval trend over recent months.</CardDescription>
@@ -56,7 +56,7 @@ export function TrendCharts({ initialTrends }: { initialTrends?: any[] }) {
             Loading analytics visualization...
           </CardContent>
         </Card>
-        <Card className="col-span-3 bg-card/50 backdrop-blur border-border shadow-sm">
+        <Card className="col-span-3 bg-white border-slate-200 shadow-xs">
           <CardHeader>
             <CardTitle>Collections Volume</CardTitle>
             <CardDescription>Monthly EMI collections and settlements.</CardDescription>

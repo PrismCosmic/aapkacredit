@@ -183,11 +183,11 @@ export function Contact() {
         </div>
 
         <Reveal>
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-lg">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-xs">
             
             {/* Topic Chips */}
             <div className="mb-5">
-              <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block mb-2">
+              <label className="text-xs font-medium text-slate-700 block mb-2">
                 What are you looking for?
               </label>
               <div className="flex flex-wrap gap-2">

@@ -144,13 +144,13 @@ export function CreditScoreCheck() {
             </div>
 
             {/* Right Bureau Score Gauge Visual (Interactive Simulator) */}
-            <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 sm:p-8 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 text-center shadow-lg">
+            <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 sm:p-8 bg-slate-900/60 rounded-2xl border border-slate-800 text-center shadow-xs">
               
-              <div className="w-full flex items-center justify-between text-xs font-bold text-slate-300 pb-3 border-b border-white/10 mb-4">
+              <div className="w-full flex items-center justify-between text-xs font-medium text-slate-300 pb-3 border-b border-slate-800 mb-4">
                 <span className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Score Simulator
+                  <Sparkles className="w-3.5 h-3.5 text-blue-400" /> Score Simulator
                 </span>
-                <span className={`px-2.5 py-0.5 rounded-full border text-[11px] font-bold ${details.badgeBg}`}>
+                <span className={`px-2.5 py-0.5 rounded-md border text-xs font-medium ${details.badgeBg}`}>
                   {details.label}
                 </span>
               </div>
@@ -173,11 +173,11 @@ export function CreditScoreCheck() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-4xl font-black text-white tracking-tight">{simulatedScore}</span>
-                  <span className={`text-[11px] font-bold uppercase tracking-wider ${details.textColor}`}>
+                  <span className="text-4xl font-bold font-mono tabular-nums text-white">{simulatedScore}</span>
+                  <span className={`text-xs font-medium ${details.textColor}`}>
                     {details.label}
                   </span>
-                  <span className="text-[10px] text-slate-400 mt-0.5">Bureau Score</span>
+                  <span className="text-xs text-slate-400 mt-0.5">Bureau Score</span>
                 </div>
               </div>
 

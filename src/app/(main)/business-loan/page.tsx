@@ -135,10 +135,10 @@ export default function BusinessLoanPage() {
 
           <div className="lg:col-span-1">
              <div className="sticky top-32">
-                <div className="p-8 rounded-3xl bg-gradient-to-br from-primary/10 to-electric/10 border border-primary/20 text-center">
-                  <h3 className="text-2xl font-display font-bold text-foreground mb-4">Plan Your Cash Flow</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    Use our EMI calculator to understand your monthly obligations before taking on debt.
+                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center shadow-xs">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">Plan Your Cash Flow</h3>
+                  <p className="text-xs text-slate-600 mb-5 leading-relaxed">
+                    Use our EMI calculator to evaluate repayment schedules before borrowing.
                   </p>
                   <MagneticButton href="/calculator" variant="primary" className="w-full">
                     Open Calculator

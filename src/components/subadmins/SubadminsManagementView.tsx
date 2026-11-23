@@ -510,7 +510,7 @@ export function SubadminsManagementView({
 
       {/* KPI Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="p-4 pb-2">
             <CardDescription className="text-xs">Total Staff Accounts</CardDescription>
             <CardTitle className="text-2xl font-bold text-foreground">{subadmins.length}</CardTitle>
@@ -520,7 +520,7 @@ export function SubadminsManagementView({
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="p-4 pb-2">
             <CardDescription className="text-xs">Active Subadmins</CardDescription>
             <CardTitle className="text-2xl font-bold text-emerald-500">
@@ -532,7 +532,7 @@ export function SubadminsManagementView({
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="p-4 pb-2">
             <CardDescription className="text-xs">Document Audits Logged</CardDescription>
             <CardTitle className="text-2xl font-bold text-primary">
@@ -544,7 +544,7 @@ export function SubadminsManagementView({
           </CardContent>
         </Card>
 
-        <Card className="bg-card/50 backdrop-blur border-border">
+        <Card className="bg-white border-slate-200 shadow-xs">
           <CardHeader className="p-4 pb-2">
             <CardDescription className="text-xs">Security Protocol</CardDescription>
             <CardTitle className="text-base font-bold text-amber-500 flex items-center gap-1.5 mt-1">
@@ -558,7 +558,7 @@ export function SubadminsManagementView({
       </div>
 
       {/* Filter & Subadmins Table */}
-      <Card className="bg-card/50 backdrop-blur border-border">
+      <Card className="bg-white border-slate-200 shadow-xs">
         <CardHeader className="p-4 pb-3 flex flex-row items-center justify-between gap-4">
           <div className="flex-1 max-w-sm relative">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />

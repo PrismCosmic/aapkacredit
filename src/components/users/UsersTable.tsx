@@ -282,7 +282,7 @@ export function UsersTable({ initialUsers = [] }: { initialUsers?: any[] }) {
       </div>
 
       {/* Main Table */}
-      <div className="rounded-xl border border-border bg-card/50 backdrop-blur overflow-hidden">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-xs overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-border">

@@ -284,11 +284,11 @@ export function LoansListView({ loans, user, initialQuery = "" }: LoansListViewP
                   <>
                     <div className="bg-muted/30 px-6 py-3 border-t border-border flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">Repayment Progress</span>
-                      <span className="font-semibold">{progressPct}%</span>
+                      <span className="font-semibold font-mono tabular-nums">{progressPct}%</span>
                     </div>
-                    <div className="w-full h-1.5 bg-muted">
+                    <div className="w-full h-1.5 bg-slate-100">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-600 to-emerald-500 transition-all duration-700"
+                        className="h-full bg-blue-600 transition-all duration-300"
                         style={{ width: `${progressPct}%` }}
                       />
                     </div>
@@ -322,7 +322,7 @@ export function LoansListView({ loans, user, initialQuery = "" }: LoansListViewP
       )}
 
       {modalKind && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 flex items-center justify-center p-4">
           <div className="w-full max-w-2xl rounded-2xl bg-card border border-border shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
             <div className="p-5 border-b border-border flex items-center justify-between">
               <h3 className="font-bold text-lg">{modalTitle}</h3>

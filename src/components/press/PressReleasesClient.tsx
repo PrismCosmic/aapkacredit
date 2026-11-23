@@ -48,14 +48,14 @@ export function PressReleasesClient({ releases }: { releases: PressReleaseItem[]
 
       {selected && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="press-modal-title"
           onClick={() => setSelected(null)}
         >
           <div
-            className="relative w-full max-w-2xl rounded-3xl bg-background border border-border p-6 sm:p-8 shadow-2xl max-h-[85vh] overflow-y-auto"
+            className="relative w-full max-w-2xl rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 shadow-lg max-h-[85vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button

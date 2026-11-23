@@ -84,7 +84,7 @@ export function MobileAppShowcase() {
                       <Star key={i} className="w-4 h-4 fill-amber-400" />
                     ))}
                   </div>
-                  <span className="text-sm font-bold text-slate-900">4.8★</span>
+                  <span className="text-xs font-semibold font-mono tabular-nums text-slate-900">4.8 / 5.0</span>
                 </div>
                 <span className="text-xs text-slate-500 font-medium">50 Lakh+ Downloads</span>
                 <span className="text-xs text-slate-500 font-medium">#1 Lending App</span>
